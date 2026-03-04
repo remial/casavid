@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Property Video - CasaVid</title>
+      <!-- Microsoft Clarity -->
+      <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "vkem7jgl60");
+      </script>
+    
+      <!-- Meta Pixel Code -->
+      <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1943527686101052');
+      fbq('track', 'PageView');
+      </script>
+      <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1943527686101052&ev=PageView&noscript=1"
+      /></noscript>
+      <!-- End Meta Pixel Code -->
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-text">CasaVid</span>
+        <span class="logo-icon">🏠</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <main class="dashboard">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1>Create Your Property Video</h1>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <!-- Photo Upload -->
+        <div class="upload-card upload-card--full">
+          <h3>1. Upload Property Photos (1-10)</h3>
+          <p class="upload-description">Upload high-quality photos of each room. More photos = more detailed video.</p>
+          
+          <div class="drop-zone drop-zone--large" id="photoDropZone" onclick="document.getElementById('photoFiles').click()">
+            <span class="drop-icon">📸</span>
+            <p>Drop photos here or click to browse</p>
+            <p class="drop-hint">JPG, PNG up to 10MB each • Upload 1-10 photos</p>
+            <input type="file" id="photoFiles" accept="image/*" multiple hidden onchange="handlePhotosSelect(this)">
+          </div>
+          
+          <div class="photos-preview" id="photosPreview">
+            <div class="photos-grid" id="photosGrid"></div>
+            <p class="photo-count"><span id="photoCount">0</span>/10 photos uploaded</p>
+          </div>
+
+          <div class="photo-tips">
+            <p><strong>Tips for best results:</strong></p>
+            <ul>
+              <li>Use well-lit, high-resolution photos</li>
+              <li>Include: living room, kitchen, bedrooms, bathrooms, exterior</li>
+              <li>Highlight unique features (fireplace, pool, views)</li>
+              <li>Avoid cluttered or dark photos</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Video Settings -->
+        <div class="upload-grid">
+          <div class="upload-card">
+            <h3>2. Video Length</h3>
+            <p class="upload-description">Longer videos showcase more details</p>
+            
+            <div class="option-cards">
+              <label class="option-card">
+                <input type="radio" name="videoLength" value="30" checked>
+                <div class="option-content">
+                  <span class="option-icon">⚡</span>
+                  <span class="option-label">30 seconds</span>
+                  <span class="option-desc">Quick overview</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="videoLength" value="60">
+                <div class="option-content">
+                  <span class="option-icon">🎬</span>
+                  <span class="option-label">60 seconds</span>
+                  <span class="option-desc">Standard tour</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="videoLength" value="120">
+                <div class="option-content">
+                  <span class="option-icon">🏆</span>
+                  <span class="option-label">2 minutes</span>
+                  <span class="option-desc">Full showcase</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="upload-card">
+            <h3>3. Property Details</h3>
+            <p class="upload-description">Help our AI write the perfect script</p>
+            
+            <div class="form-group">
+              <label for="propertyType">Property Type</label>
+              <select id="propertyType" class="form-select">
+                <option value="house">House</option>
+                <option value="apartment">Apartment / Condo</option>
+                <option value="townhouse">Townhouse</option>
+                <option value="villa">Villa</option>
+                <option value="studio">Studio</option>
+                <option value="commercial">Commercial Space</option>
+              </select>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bedrooms">Bedrooms</label>
+                <select id="bedrooms" class="form-select">
+                  <option value="studio">Studio</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3" selected>3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bathrooms">Bathrooms</label>
+                <select id="bathrooms" class="form-select">
+                  <option value="1">1</option>
+                  <option value="1.5">1.5</option>
+                  <option value="2" selected>2</option>
+                  <option value="2.5">2.5</option>
+                  <option value="3+">3+</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="highlights">Key Features (optional)</label>
+              <textarea id="highlights" class="form-textarea" placeholder="e.g., Renovated kitchen, hardwood floors, large backyard, mountain views, pool..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Narrator Settings -->
+        <div class="upload-card upload-card--full">
+          <h3>4. Narrator Voice</h3>
+          <p class="upload-description">Choose the voice style for your video narration</p>
+          
+          <div class="voice-options">
+            <label class="voice-option">
+              <input type="radio" name="voiceStyle" value="professional-male" checked>
+              <div class="voice-content">
+                <span class="voice-icon">🎙️</span>
+                <span class="voice-label">Professional Male</span>
+                <span class="voice-desc">Warm, authoritative tone</span>
+              </div>
+            </label>
+            <label class="voice-option">
+              <input type="radio" name="voiceStyle" value="professional-female">
+              <div class="voice-content">
+                <span class="voice-icon">🎤</span>
+                <span class="voice-label">Professional Female</span>
+                <span class="voice-desc">Friendly, engaging tone</span>
+              </div>
+            </label>
+            <label class="voice-option">
+              <input type="radio" name="voiceStyle" value="luxury">
+              <div class="voice-content">
+                <span class="voice-icon">✨</span>
+                <span class="voice-label">Luxury Style</span>
+                <span class="voice-desc">Elegant, premium feel</span>
+              </div>
+            </label>
+            <label class="voice-option">
+              <input type="radio" name="voiceStyle" value="casual">
+              <div class="voice-content">
+                <span class="voice-icon">😊</span>
+                <span class="voice-label">Casual & Friendly</span>
+                <span class="voice-desc">Relaxed, conversational</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="generate-section">
+          <button class="generate-btn" onclick="handleGenerate()">
+            <span class="btn-icon">🎬</span>
+            Generate Property Video
+          </button>
+          <p class="generate-note">Videos include AI narration and subtitles • Usually ready in 2-5 minutes</p>
+        </div>
+      </div>
+
+      <!-- Recent Videos -->
+      <div class="recent-section">
+        <h2>Your Videos</h2>
+        <div class="videos-grid" id="videosGrid">
+          <div class="video-card placeholder">
+            <div class="placeholder-content">
+              <span class="placeholder-icon">🏠</span>
+              <p>Your property videos will appear here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Processing Modal -->
+  <div class="modal-overlay" id="processingModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Creating Your Video</h2>
+      </div>
+      <div class="processing-content">
+        <div class="processing-animation">
+          <span class="processing-emoji">🏠</span>
+        </div>
+        <p class="processing-status" id="processingStatus">Analyzing property photos...</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="processing-time">This usually takes 2-5 minutes</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

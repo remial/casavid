@@ -230,44 +230,12 @@ function handleGenerate() {
 
 function showProcessingModal() {
   const modal = document.getElementById('processingModal');
-  const progressFill = document.getElementById('progressFill');
-  const statusEl = document.getElementById('processingStatus');
   
   if (modal) modal.classList.add('active');
   
-  const statuses = [
-    'Analyzing property photos...',
-    'Identifying rooms and features...',
-    'Generating narration script...',
-    'Creating smooth transitions...',
-    'Adding AI voiceover...',
-    'Generating subtitles...',
-    'Finalizing your video...'
-  ];
-  
-  let progress = 0;
-  let statusIndex = 0;
-  
-  const interval = setInterval(() => {
-    progress += Math.random() * 10 + 3;
-    if (progress > 100) progress = 100;
-    
-    if (progressFill) progressFill.style.width = progress + '%';
-    
-    const nextThreshold = (statusIndex + 1) * (100 / statuses.length);
-    if (progress > nextThreshold && statusIndex < statuses.length - 1) {
-      statusIndex++;
-      if (statusEl) statusEl.textContent = statuses[statusIndex];
-    }
-    
-    if (progress >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        if (modal) modal.classList.remove('active');
-        window.location.href = 'pricing.html';
-      }, 500);
-    }
-  }, 400);
+  setTimeout(() => {
+    window.location.href = 'pricing.html';
+  }, 3000);
 }
 
 // ============================================

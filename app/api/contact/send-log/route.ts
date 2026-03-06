@@ -113,7 +113,7 @@ export async function POST(req: Request) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
     const data = await resend.emails.send({
-      from: "CasaVid Support <hello@send.casavid.com>",
+      from: "CasaVid Support <hello@casavid.com>",
       replyTo: ["aimeromailbox@gmail.com"],
       to: [ADMIN_EMAIL],
       subject: `Support Chat Log - ${userEmail || "Anonymous User"}`,

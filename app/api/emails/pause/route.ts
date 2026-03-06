@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     const data = await resend.emails.send({
-      from: "CasaVid 🏠 <hello@send.casavid.com>",
+      from: "CasaVid 🏠 <hello@casavid.com>",
       to: [userEmail],
       bcc: ["aimeromailbox@gmail.com"],                    // Dynamic recipient
       replyTo: ["aimeromailbox@gmail.com"], // Updated support address

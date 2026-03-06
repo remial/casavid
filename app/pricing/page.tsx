@@ -35,20 +35,18 @@ const Page = () => {
       quota: 5,
       features: [
         { text: '5 videos per month' },
-        { text: 'Up to 10 photos per video' },
+        { text: 'Up to 5 photos per video' },
         { text: '30-second videos' },
-        { text: 'AI narration' },
-        { text: 'Auto subtitles' },
         { 
-          text: '720p quality',
+          text: 'AI narration',
           negative: true 
         },
         { 
-          text: 'CasaVid watermark',
+          text: 'Auto subtitles',
           negative: true 
         },
         { 
-          text: 'Email support',
+          text: '60-second videos',
           negative: true 
         },
       ],
@@ -63,24 +61,21 @@ const Page = () => {
         { text: '60-second videos' },
         { text: 'AI narration + 4 voices' },
         { text: 'Auto subtitles' },
-        { text: '1080p HD quality' },
-        { text: 'No watermark' },
-        { text: 'Priority support' },
+        { text: 'Priority processing' },
       ],
     },
     {
-      plan: 'Business',
+      plan: 'Premium',
       tagline: 'For teams & brokerages',
-      quota: -1,
+      quota: 50,
       features: [
-        { text: 'Unlimited videos' },
-        { text: 'Up to 10 photos per video' },
+        { text: '50 videos per month' },
+        { text: 'Up to 20 photos per video' },
         { text: '2-minute videos' },
         { text: 'All voice styles' },
         { text: 'Custom branding/logo' },
-        { text: '4K quality option' },
         { text: 'Priority processing' },
-        { text: 'Dedicated support' },
+       
       ],
     },
   ]
@@ -88,7 +83,7 @@ const Page = () => {
   return (
     <>
       <MaxWidthWrapper className='mb-8 mt-8 text-center max-w-7xl'>
-        <div className='mx-auto mb-10 sm:max-w-lg'>
+        <div className='yeseva mx-auto mb-10 sm:max-w-lg'>
           <h1 className='text-3xl font-bold sm:text-4xl text-gray-800'>
             Turn Every Listing Into a Video Tour 🏠
           </h1>
@@ -197,7 +192,7 @@ const Page = () => {
 
         {/* What's included section */}
         <div className='mt-16 max-w-4xl mx-auto'>
-          <h3 className='text-xl font-bold text-gray-800 mb-6'>What's included in every video:</h3>
+          <h3 className='text-xl font-bold text-gray-800 mb-6'>What's we offer:</h3>
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             {[
               { icon: '🎙️', text: 'Professional AI narration' },
@@ -220,11 +215,11 @@ const Page = () => {
           <h3 className='text-lg font-bold text-gray-800 mb-4'>All plans include:</h3>
           <div className='flex flex-wrap justify-center gap-4'>
             {[
-              'Unlimited revisions',
+              
               'Fast processing',
               'Download anytime',
               'Share to social media',
-              'MLS-ready exports',
+             
             
             ].map((feature) => (
               <span key={feature} className='flex items-center gap-1 text-sm text-gray-600'>

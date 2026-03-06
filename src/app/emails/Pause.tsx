@@ -12,7 +12,7 @@ import {
 import * as React from "react";
 
 export const Pause = () => {
-  const pricingUrl = "https://www.vidnarrate.com/pricing";
+  const pricingUrl = "https://www.casavid.com/pricing";
 
   return (
     <Html>
@@ -37,7 +37,7 @@ export const Pause = () => {
             </Text>
 
             <Text className="mt-4 leading-6">
-              Your VidNarrate video generation and YouTube scheduling are temporarily on pause for now.
+              Your CasaVid video generation is temporarily on pause for now.
             </Text>
 
             <Text className="mt-4 leading-6">
@@ -56,11 +56,11 @@ export const Pause = () => {
             </Text>
 
             <Text className="mt-4 leading-6">
-              As a Vidnarrate user, you always have access to Customer Support every day of the week and even on weekends! We look forward to hearing from you.
+              As a CasaVid user, you always have access to Customer Support every day of the week and even on weekends! We look forward to hearing from you.
             </Text>
 
             <Text className="mt-6 mb-0 leading-6">Cheers,</Text>
-            <Text className="m-0 font-bold leading-6">The VidNarrate Team</Text>
+            <Text className="m-0 font-bold leading-6">The CasaVid Team</Text>
           </Container>
         </Body>
       </Tailwind>

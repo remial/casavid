@@ -18,10 +18,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 const webhookSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 // Hard-coded production URL for pause emails
-const PAUSE_EMAIL_URL = 'https://www.vidnarrate.com/api/emails/pause';
+const PAUSE_EMAIL_URL = 'https://www.casavid.com/api/emails/pause';
 
 // Hard-coded production URL for portal notification emails
-const PORTAL_NOTIFICATION_URL = 'https://www.vidnarrate.com/api/emails/portal-notification';
+const PORTAL_NOTIFICATION_URL = 'https://www.casavid.com/api/emails/portal-notification';
 
 // Helper: determine base URL for internal API calls
 function getBaseUrl(reqUrl: string) {
@@ -73,67 +73,33 @@ const priceIdToEntitlements: Record<string, {
   credits: number;
   maxCredits: number;
   subLevel: number;
-  seriesLimit: number;
-  weeklyLimit: number;
   billingPeriod: 'monthly' | 'yearly';
   planName: string;
 }> = {
-  // Monthly Plans
-  'price_1PwkyVLqZXIo1J6dwuKYUk4I': {
-    credits: 13,
-    maxCredits: 13,
+  // Starter Plan - 5 credits, subLevel 1
+  'price_1T7sibLHSgRRnn5DBAyNexQu': {
+    credits: 5,
+    maxCredits: 5,
     subLevel: 1,
-    seriesLimit: 1,
-    weeklyLimit: 3,
     billingPeriod: 'monthly',
     planName: 'Starter Plan'
   },
-  'price_1PwkzpLqZXIo1J6d8eV0CnuK': {
-    credits: 31,
-    maxCredits: 31,
+  // Pro Plan - 20 credits, subLevel 2
+  'price_1T7sjWLHSgRRnn5DionEak0x': {
+    credits: 20,
+    maxCredits: 20,
     subLevel: 2,
-    seriesLimit: 1,
-    weeklyLimit: 7,
     billingPeriod: 'monthly',
-    planName: 'Daily Plan'
+    planName: 'Pro Plan'
   },
-  'price_1QNAd5LqZXIo1J6dwEsexReQ': {
-    credits: 62,
-    maxCredits: 62,
+  // Premium Plan - 50 credits, subLevel 3
+  'price_1T7spOLHSgRRnn5DgQbnFpIk': {
+    credits: 50,
+    maxCredits: 50,
     subLevel: 3,
-    seriesLimit: 1,
-    weeklyLimit: 14,
     billingPeriod: 'monthly',
-    planName: 'Twice Daily Plan'
+    planName: 'Premium Plan'
   },
-  // Yearly Plans
-  'price_1SNu5zLqZXIo1J6dMc9P5vSl': {
-    credits: 13,
-    maxCredits: 13,
-    subLevel: 1,
-    seriesLimit: 1,
-    weeklyLimit: 3,
-    billingPeriod: 'yearly',
-    planName: 'Starter Plan (Annual)'
-  },
-  'price_1SNu73LqZXIo1J6dPLNHq0ef': {
-    credits: 31,
-    maxCredits: 31,
-    subLevel: 2,
-    seriesLimit: 1,
-    weeklyLimit: 7,
-    billingPeriod: 'yearly',
-    planName: 'Daily Plan (Annual)'
-  },
-  'price_1SNu85LqZXIo1J6dUq0X5BlH': {
-    credits: 62,
-    maxCredits: 62,
-    subLevel: 3,
-    seriesLimit: 1,
-    weeklyLimit: 14,
-    billingPeriod: 'yearly',
-    planName: 'Twice Daily Plan (Annual)'
-  }
 };
 
 // List of user IDs to exempt from invoice.payment_failed database modifications
@@ -173,7 +139,6 @@ export async function POST(req: Request) {
       if (checkoutSession.metadata?.type === 'topup') {
         const userId = checkoutSession.metadata.userId;
         const creditsToAdd = parseInt(checkoutSession.metadata.credits || '0', 10);
-        const cinemaCreditsToSet = parseInt(checkoutSession.metadata.cinemaCredits || '10', 10);
         
         if (!userId) {
           console.error('Top-up webhook: No userId in metadata');
@@ -193,12 +158,11 @@ export async function POST(req: Request) {
         
         await userRef.update({
           credits: newCredits,
-          creditsCinema: cinemaCreditsToSet,
           lastTopUp: admin.firestore.Timestamp.now(),
           lastTopUpAmount: creditsToAdd,
         });
         
-        console.log(`✅ Top-up successful for user ${userId}: +${creditsToAdd} credits (${currentCredits} → ${newCredits}), Cinema credits set to ${cinemaCreditsToSet}`);
+        console.log(`✅ Top-up successful for user ${userId}: +${creditsToAdd} credits (${currentCredits} → ${newCredits})`);
         return NextResponse.json({ success: true }, { status: 200 });
       }
     }
@@ -273,7 +237,7 @@ export async function POST(req: Request) {
       // Map Price ID → entitlements
       const entitlements = priceIdToEntitlements[priceId];
       if (entitlements) {
-        const { credits: creditsToAdd, maxCredits, subLevel, seriesLimit, weeklyLimit, billingPeriod, planName } = entitlements;
+        const { credits: creditsToAdd, maxCredits, subLevel, billingPeriod, planName } = entitlements;
         const userDoc = await userRef.get();
         if (!userDoc.exists) {
           console.error(`User document not found for ID: ${userId}`);
@@ -302,16 +266,10 @@ export async function POST(req: Request) {
           subscriptionId = invoice.subscription as string;
         }
 
-        // Set creditsCinema to 10 for subLevel 3 users
-        const creditsCinema = subLevel === 3 ? 10 : 0;
-
-        console.log(`✅ Updating user ${userId} to ${planName}: Credits ${currentCredits} → ${updatedCredits}, Cinema: ${creditsCinema}, SubLevel: ${subLevel}, Period: ${billingPeriod}`);
+        console.log(`✅ Updating user ${userId} to ${planName}: Credits ${currentCredits} → ${updatedCredits}, SubLevel: ${subLevel}, Period: ${billingPeriod}`);
         await userRef.update({
           credits: updatedCredits,
-          creditsCinema,
           isSubscribed: true,
-          seriesLimit,
-          weeklyLimit,
           subLevel,
           billingPeriod,
           lastCreditRefresh: now,
@@ -450,10 +408,7 @@ export async function POST(req: Request) {
       // Zero out user allowance
       await userRef.update({
         credits: 0,
-        creditsCinema: 0,
         isSubscribed: false,
-        seriesLimit: 0,
-        weeklyLimit: 0,
         subLevel: 0,
       });
       console.log(`Reset allowances for user ${userId} after payment failure`);
@@ -569,10 +524,7 @@ export async function POST(req: Request) {
       // Zero out user allowance and update subscription status
       await userRef.update({
         credits: 0,
-        creditsCinema: 0,
         isSubscribed: false,
-        seriesLimit: 0,
-        weeklyLimit: 0,
         subLevel: 0,
         stripeSubscriptionId: null,
         stripePriceId: null,
@@ -794,7 +746,7 @@ Subscription Status: ${subscription.status}`;
             const oldEntitlements = oldPriceId ? priceIdToEntitlements[oldPriceId] : null;
             
             if (newEntitlements) {
-              const { credits: newPlanCredits, maxCredits, subLevel, seriesLimit, weeklyLimit, billingPeriod, planName } = newEntitlements;
+              const { credits: newPlanCredits, maxCredits, subLevel, billingPeriod, planName } = newEntitlements;
               
               // Lookup user ID by Stripe customer ID
               const customersRef = admin.firestore().collection('customers');
@@ -869,16 +821,10 @@ Subscription Status: ${subscription.status}`;
                   const nextRefreshDate = new Date(subscription.current_period_end * 1000);
                   const nextCreditRefresh = admin.firestore.Timestamp.fromDate(nextRefreshDate);
                   
-                  // Set creditsCinema to 10 for subLevel 3 users
-                  const creditsCinema = subLevel === 3 ? 10 : 0;
-                  
                   // Update user with new plan details
                   await userRef.update({
                     credits: finalCredits,
-                    creditsCinema,
                     subLevel,
-                    seriesLimit,
-                    weeklyLimit,
                     billingPeriod,
                     stripePriceId: newPriceId,
                     stripeSubscriptionId: subscription.id,
@@ -889,10 +835,10 @@ Subscription Status: ${subscription.status}`;
                   
                   console.log(`✅ ${changeType}: User ${userId} → ${planName}`);
                   console.log(`   Credits: ${currentCredits} (had) + ${creditDifference} (difference) = ${finalCredits} (final)`);
-                  console.log(`   Cinema: ${creditsCinema}, SubLevel: ${subLevel}`);
+                  console.log(`   SubLevel: ${subLevel}`);
                   
                   const oldPlanName = oldEntitlements?.planName || 'Previous Plan';
-                  changeDetails = `Your subscription has been ${isUpgrade ? 'upgraded' : 'downgraded'} from ${oldPlanName} to ${planName}. Credits adjusted by ${creditDifference > 0 ? '+' : ''}${creditDifference} (now ${finalCredits} total)${creditsCinema > 0 ? `, Cinema credits: ${creditsCinema}` : ''}, Weekly limit: ${weeklyLimit}`;
+                  changeDetails = `Your subscription has been ${isUpgrade ? 'upgraded' : 'downgraded'} from ${oldPlanName} to ${planName}. Credits adjusted by ${creditDifference > 0 ? '+' : ''}${creditDifference} (now ${finalCredits} total).`;
                 }
               } else {
                 console.warn(`No user found for customer ID ${customerId} during plan change`);

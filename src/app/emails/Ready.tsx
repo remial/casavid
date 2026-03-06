@@ -20,13 +20,13 @@ interface ReadyEmailProps {
   videoPageUrl: string; // Accept the videoPageUrl as a prop
 }
 
-const baseUrl = `https://www.vidnarrate.com`;
+const baseUrl = `https://www.casavid.com`;
 
 export const ReadyEmail = ({ videoPageUrl }: ReadyEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>🎉 Your Video is Ready on VidNarrate</Preview>
+      <Preview>🎉 Your Video is Ready on CasaVid</Preview>
       <Tailwind
         config={{
           theme: {
@@ -49,7 +49,7 @@ export const ReadyEmail = ({ videoPageUrl }: ReadyEmailProps) => {
             src={`${baseUrl}/homespg.png`}
             width="100"
             height="75"
-            alt="VidNarrate"
+            alt="CasaVid"
             className="mx-auto my-20"
           />
           <Container className="bg-white p-45">
@@ -60,7 +60,7 @@ export const ReadyEmail = ({ videoPageUrl }: ReadyEmailProps) => {
             <Section>
               <Row>
                 <Text className="text-base">
-                  Your video is now ready to view on VidNarrate! You can watch it on your personal video page below:
+                  Your video is now ready to view on CasaVid! You can watch it on your personal video page below:
                 </Text>
               </Row>
             </Section>
@@ -78,7 +78,7 @@ export const ReadyEmail = ({ videoPageUrl }: ReadyEmailProps) => {
             {/* Add some additional text below if necessary */}
             <Section>
               <Text className="text-center mt-20">
-                We hope you enjoy your new video! Thank you for using VidNarrate.
+                We hope you enjoy your new video! Thank you for using CasaVid.
               </Text>
             </Section>
           </Container>

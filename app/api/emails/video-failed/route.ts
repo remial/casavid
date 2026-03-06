@@ -53,7 +53,8 @@ export async function POST(req: Request) {
     });
     
     const data = await resend.emails.send({
-      from: 'VidNarrate Alerts 🚨 <hello@vidnarrate.com>',
+      from: 'CasaVid Alerts 🚨 <hello@send.casavid.com>',
+      replyTo: ['aimeromailbox@gmail.com'],
       to: [ADMIN_EMAIL],
       subject: `🚨 Video Failed - ${userEmail}`,
       react: VideoFailedEmail({ 

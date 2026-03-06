@@ -20,31 +20,68 @@ export interface PlanInfo {
 export const PRODUCT_INFO = {
   name: "CasaVid",
   url: "https://www.casavid.com",
-  description: "CasaVid is an AI-powered platform that transforms property photos into professional walkthrough videos with AI narration and subtitles. Perfect for real estate agents, property managers, and Airbnb hosts who want to showcase their properties.",
+  description: "CasaVid is an AI-powered platform that transforms property photos into professional walkthrough videos. Perfect for real estate agents, property managers, and Airbnb hosts who want to showcase their properties.",
   coreFeatures: [
-    "Upload 1-10 property photos",
+    "Upload property photos (5-20 depending on plan)",
     "AI-generated property video scripts",
-    "Professional AI voice narration",
-    "Multiple narrator voice styles",
-    "Automatic video captions/subtitles",
-    "Multiple video length options (30s, 60s, 2min)",
-    "Property type customization",
-    "Key features highlighting",
+    "Professional AI voice narration (Pro & Premium)",
+    "Multiple narrator voice styles (Pro & Premium)",
+    "Automatic video captions/subtitles (Pro & Premium)",
+    "Video lengths from 30 seconds to 2 minutes",
+    "Smooth Ken Burns transitions",
+    "Background music",
+    "Multiple export formats",
+    "Cloud storage for videos",
+    "Fast processing",
+    "Download anytime",
+    "Share to social media",
   ],
 };
 
 export const PLANS: PlanInfo[] = [
   {
-    name: "Pay Per Video",
-    slug: "credits",
-    price: 5,
-    quota: 1,
+    name: "Starter",
+    slug: "starter",
+    price: 19,
+    quota: 5,
     features: [
-      "1 credit = 1 property video",
-      "Professional AI narration",
-      "Auto-generated subtitles",
-      "Download in HD",
-      "Multiple video lengths",
+      "5 videos per month",
+      "Up to 5 photos per video",
+      "30-second videos",
+    ],
+    limitations: [
+      "No AI narration",
+      "No auto subtitles",
+      "No 60-second videos",
+    ],
+  },
+  {
+    name: "Pro",
+    slug: "pro",
+    price: 39,
+    quota: 20,
+    features: [
+      "20 videos per month",
+      "Up to 10 photos per video",
+      "60-second videos",
+      "AI narration + 4 voice styles",
+      "Auto subtitles",
+      "Priority processing",
+    ],
+    limitations: [],
+  },
+  {
+    name: "Premium",
+    slug: "premium",
+    price: 79,
+    quota: 50,
+    features: [
+      "50 videos per month",
+      "Up to 20 photos per video",
+      "2-minute videos",
+      "All voice styles",
+      "Custom branding/logo",
+      "Priority processing",
     ],
     limitations: [],
   },
@@ -77,24 +114,24 @@ export const FAQS: FAQ[] = [
     keywords: ["property", "type", "house", "apartment", "condo", "real estate"],
   },
   {
-    question: "How many photos should I upload?",
-    answer: "You can upload between 1 and 10 photos per property video. More photos generally result in a more detailed video tour. We recommend including photos of the living room, kitchen, bedrooms, bathrooms, and exterior.",
+    question: "How many photos can I upload?",
+    answer: "The number of photos depends on your plan: Starter allows up to 5 photos, Pro allows up to 10 photos, and Premium allows up to 20 photos per video. More photos generally result in a more detailed video tour. We recommend including photos of the living room, kitchen, bedrooms, bathrooms, and exterior.",
     keywords: ["photos", "images", "upload", "how many", "pictures"],
   },
   {
     question: "What video lengths are available?",
-    answer: "CasaVid offers three video length options: 30 seconds for a quick overview, 60 seconds for a standard tour, and 2 minutes for a full property showcase.",
+    answer: "Video length depends on your plan: Starter includes 30-second videos, Pro includes up to 60-second videos, and Premium includes up to 2-minute videos for a full property showcase.",
     keywords: ["length", "duration", "seconds", "minutes", "long"],
   },
   {
     question: "What narrator voices are available?",
-    answer: "We offer multiple narrator voice styles: Professional Male (warm, authoritative), Professional Female (friendly, engaging), Luxury Style (elegant, premium), and Casual & Friendly (relaxed, conversational).",
+    answer: "AI narration is available on Pro and Premium plans. Pro includes 4 voice styles, while Premium includes all voice styles. Options include Professional Male (warm, authoritative), Professional Female (friendly, engaging), Luxury Style (elegant, premium), and Casual & Friendly (relaxed, conversational).",
     keywords: ["voice", "narrator", "style", "male", "female", "narration"],
   },
   {
-    question: "How do credits work?",
-    answer: "Each property video costs 1 credit. You can purchase credits from the pricing page. Credits don't expire and can be used anytime.",
-    keywords: ["credit", "credits", "cost", "pay", "price"],
+    question: "What subscription plans are available?",
+    answer: "We offer three plans: Starter ($19/month) with 5 videos, up to 5 photos, and 30-second videos. Pro ($39/month) with 20 videos, up to 10 photos, 60-second videos, AI narration, and auto subtitles. Premium ($79/month) with 50 videos, up to 20 photos, 2-minute videos, all voice styles, and custom branding.",
+    keywords: ["plan", "plans", "subscription", "pricing", "price", "cost", "starter", "pro", "premium"],
   },
   {
     question: "What payment methods are accepted?",
@@ -112,17 +149,17 @@ export const IMPORTANT_LINKS = {
 
 export type UserCategory = 
   | "not_signed_in"
-  | "signed_in_no_credits"
-  | "signed_in_with_credits";
+  | "signed_in_no_subscription"
+  | "signed_in_with_subscription";
 
 export function getUserCategoryLabel(category: UserCategory): string {
   switch (category) {
     case "not_signed_in":
       return "Not signed in";
-    case "signed_in_no_credits":
-      return "Signed in - no credits";
-    case "signed_in_with_credits":
-      return "Signed in - has credits";
+    case "signed_in_no_subscription":
+      return "Signed in - no subscription";
+    case "signed_in_with_subscription":
+      return "Signed in - has subscription";
   }
 }
 
@@ -157,10 +194,10 @@ WHAT YOU CANNOT DO:
 
 PRODUCT INFO (use only when relevant):
 - CasaVid transforms property photos into professional walkthrough videos
-- Upload 1-10 photos, add property details, choose video length and narrator voice
-- Video lengths: 30 seconds, 60 seconds, or 2 minutes
-- 1 credit = 1 property video
-- Videos include AI narration and auto-generated subtitles
+- Three subscription plans: Starter ($19/mo, 5 videos), Pro ($39/mo, 20 videos), Premium ($79/mo, 50 videos)
+- Photo limits: Starter (5 photos), Pro (10 photos), Premium (20 photos)
+- Video lengths: Starter (30s), Pro (60s), Premium (2 minutes)
+- AI narration and auto subtitles available on Pro and Premium plans only
 
 KEY LINKS (only share when relevant):
 - Pricing: ${IMPORTANT_LINKS.pricing}
@@ -174,11 +211,11 @@ KEY LINKS (only share when relevant):
     case "not_signed_in":
       categoryPrompt = `\n\nUSER STATUS: This user is NOT signed in. Do not ask if they are signed in. If they need to use features, tell them to sign in first.`;
       break;
-    case "signed_in_no_credits":
-      categoryPrompt = `\n\nUSER STATUS: This user IS signed in but has NO credits. They need to purchase credits to create videos.`;
+    case "signed_in_no_subscription":
+      categoryPrompt = `\n\nUSER STATUS: This user IS signed in but has NO active subscription. They need to subscribe to a plan to create videos.`;
       break;
-    case "signed_in_with_credits":
-      categoryPrompt = `\n\nUSER STATUS: This user IS signed in and has credits. They can create property videos.`;
+    case "signed_in_with_subscription":
+      categoryPrompt = `\n\nUSER STATUS: This user IS signed in and has an active subscription. They can create property videos.`;
       break;
   }
 

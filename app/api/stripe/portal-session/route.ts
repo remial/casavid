@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 // Always use your live domain
-const BASE_URL = "https://www.vidnarrate.com";
+const BASE_URL = "https://www.casavid.com";
 
 export const runtime = "edge";
 

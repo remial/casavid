@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     const data = await resend.emails.send({
-      from: "VidNarrate <hello@vidnarrate.com>",
+      from: "CasaVid 🏠 <hello@send.casavid.com>",
       to: [userEmail],
       bcc: ["aimeromailbox@gmail.com"],                    // Dynamic recipient
       replyTo: ["aimeromailbox@gmail.com"], // Updated support address
@@ -23,7 +23,7 @@ Hey there,
 It looks like your latest payment didn’t go through. 
 No worries, it does happen. It might be the bank having a short nap.
 
-Your VidNarrate video generation and YouTube scheduling are on pause for now.
+Your CasaVid video generation is on pause for now.
 
 To get things rolling again, we'll retry soon. Or you can pick a plan on our: Pricing Page
 
@@ -33,7 +33,7 @@ You always have access to Customer Support every day of the week and even on wee
 
 Cheers,
 
-The VidNarrate Team
+The CasaVid Team
       `,
       headers: {
         "List-Unsubscribe": "<mailto:aimeromailbox@gmail.com>"

@@ -20,7 +20,7 @@ interface VideoFailedEmailProps {
   timestamp: string;
 }
 
-const baseUrl = `https://www.vidnarrate.com`;
+const baseUrl = `https://www.casavid.com`;
 
 export const VideoFailedEmail = ({ 
   userId, 
@@ -55,7 +55,7 @@ export const VideoFailedEmail = ({
             src={`${baseUrl}/homespg.png`}
             width="100"
             height="75"
-            alt="VidNarrate"
+            alt="CasaVid"
             className="mx-auto my-20"
           />
           <Container className="bg-white p-45">

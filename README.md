@@ -7,7 +7,7 @@ Steps from Framework
 4. Create firebase store 
 5. Populate .env data (the first 2 are from https://console.cloud.google.com/ (use create credentials at the top (OAuth Client ID) and fill uri and callbacks. you'll get the 2 after create), while the rest are from firebase. After you register your app as a web app)> For email and key .env go to console.cloud.google.com "Service Accounts" Keys. Create new keys as json
 6. Edit what users see when they click continue with google (https://console.cloud.google.com/apis/credentials/consent)
-6b. In Firebase (where database, storage bucket etc will appear) go to project setting and add web app. Copy the config to firebase.ts
+6b. In Firebase (where database, storage bucket etc will appear) go to project setting and add web app. Copy the config to firebase.ts (No, this will expose keys publicly, make sure it references .env)
 7. Edit Firebase database settings and Storage stettings to allow writing
 8. Get the 2 API keys from stripe and fill
 9. Go through code and update price id

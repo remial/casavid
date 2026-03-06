@@ -12,13 +12,13 @@ import {
 import * as React from "react";
 
 export const Welcome2 = () => {
-  const pricingUrl = "https://www.vidnarrate.com/pricing";
+  const pricingUrl = "https://www.casavid.com/pricing";
   const discountCode = "REMOVE20";
 
   return (
     <Html>
       <Head />
-      <Preview>Welcome to VidNarrate 🎉</Preview>
+      <Preview>Welcome to CasaVid 🏠</Preview>
       <Tailwind
         config={{
           theme: {
@@ -31,14 +31,14 @@ export const Welcome2 = () => {
             <Text className="leading-6">Hello there,</Text>
 
             <Text className="mt-4 leading-6">
-              Thank you for visiting VidNarrate today. We are so glad you stopped
+              Thank you for visiting CasaVid today. We are so glad you stopped
               by.
             </Text>
 
             <Text className="mt-4 leading-6">
-              At Vidnarrate, we use{" "}
-              <span className="font-bold">the very latest AI technology</span> to
-              help you convert any topic you want into stunning videos, and it can also be automatically uploaded to your YouTube channel in seconds!
+              At CasaVid, we help you{" "}
+              <span className="font-bold">transform your property photos into stunning real estate videos</span> that
+              showcase your listings beautifully and help you close deals faster!
             </Text>
 
             <Text className="mt-4 leading-6">
@@ -56,23 +56,22 @@ export const Welcome2 = () => {
             </Text>
 
             <Text className="mt-4 leading-6">
-              Think of us as your personal video butler minus the tuxedo 😄.
+              Think of us as your personal real estate video producer minus the expensive crew 😄.
             </Text>
 
             <Text className="mt-4 leading-6">
-              As a VidNarrate user, you have access to Customer Support every day of the week,{" "}
+              As a CasaVid user, you have access to Customer Support every day of the week,{" "}
               <span className="font-bold">even on weekends</span>! So send us an email if you need
               anything.
             </Text>
 
             <Text className="mt-4 leading-6">
-              We look forward to having you on board our exciting and creative
-              ride.
+              We look forward to helping you showcase your properties!
             </Text>
 
             <Text className="mt-6 mb-0 leading-6">Best regards,</Text>
             <Text className="m-0 font-bold leading-6">
-              VidNarrate Customer Support
+              CasaVid Customer Support
             </Text>
           </Container>
         </Body>

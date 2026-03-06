@@ -59,8 +59,8 @@ export async function POST(req: Request) {
       customer: stripeCustomerId,
       line_items: lineItems,
       mode: 'subscription',
-      success_url: successUrl || `${process.env.NEXTAUTH_URL || 'https://www.vidnarrate.com'}/success`,
-      cancel_url: cancelUrl || `${process.env.NEXTAUTH_URL || 'https://www.vidnarrate.com'}/pricing`,
+      success_url: successUrl || `${process.env.NEXTAUTH_URL || 'https://www.casavid.com'}/success`,
+      cancel_url: cancelUrl || `${process.env.NEXTAUTH_URL || 'https://www.casavid.com'}/pricing`,
       metadata: {
         datafast_visitor_id: datafastVisitorId,
         datafast_session_id: datafastSessionId,

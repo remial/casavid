@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const data = await resend.emails.send({
-      from: 'CasaVid 🏠 <hello@casavid.com>',
+      from: 'CasaVid 🏠 <hello@send.casavid.com>',
       to: [userEmail],
       replyTo: ['aimeromailbox@gmail.com'],
       subject: 'Welcome to CasaVid 🏠',

@@ -23,7 +23,7 @@ const DataFast = () => {
         strategy="afterInteractive"
         defer
         data-website-id="dfid_FNXO2l1O9pvThevsFsnPL"
-        data-domain="www.vidnarrate.com"
+        data-domain="www.casavid.com"
         src="https://datafa.st/js/script.js"
       />
     </>

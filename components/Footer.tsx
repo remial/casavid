@@ -6,8 +6,8 @@ export default function Footer() {
       
       <div className="flex flex-col text-left text-gray-500 space-y-2">
         <h3 className="text-gray-700 font-bold">Company</h3>
-        <Link className="hover:underline hover:text-blue-600" href="https://www.vidnarrate.com" target="_blank">
-          Vidnarrate
+        <Link className="hover:underline hover:text-blue-600" href="https://www.casavid.com" target="_blank">
+          CasaVid
         </Link>
         
       </div>

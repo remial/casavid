@@ -27,7 +27,7 @@ interface ChatLogEmailProps {
   sessionEnd: string;
 }
 
-const baseUrl = `https://www.vidnarrate.com`;
+const baseUrl = `https://www.casavid.com`;
 
 export const ChatLogEmail = ({
   userEmail,
@@ -62,7 +62,7 @@ export const ChatLogEmail = ({
             src={`${baseUrl}/homespg.png`}
             width="100"
             height="75"
-            alt="VidNarrate"
+            alt="CasaVid"
             className="mx-auto my-20"
           />
           <Container className="bg-white p-45">
@@ -99,7 +99,7 @@ export const ChatLogEmail = ({
                     }`}
                   >
                     <strong>
-                      {message.role === "user" ? "Customer" : "VidNarrate Bot"}:
+                      {message.role === "user" ? "Customer" : "CasaVid Bot"}:
                     </strong>
                     <br />
                     {message.content}

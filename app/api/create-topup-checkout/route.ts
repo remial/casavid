@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     }
 
     const topupInfo = TOPUP_PRICE_IDS[priceId];
-    const baseUrl = process.env.NEXTAUTH_URL || 'https://www.vidnarrate.com';
+    const baseUrl = process.env.NEXTAUTH_URL || 'https://www.casavid.com';
 
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,

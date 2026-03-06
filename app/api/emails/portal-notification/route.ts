@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     
     const data = await resend.emails.send({
-      from: 'VidNarrate 🚀 <hello@vidnarrate.com>',
+      from: 'CasaVid 🏠 <hello@send.casavid.com>',
       to: ['aimeromailbox@gmail.com'], // Send to your specified email
       replyTo: ['aimeromailbox@gmail.com'],
       subject: `Customer Portal Activity - ${changeType}`,

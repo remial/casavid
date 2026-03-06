@@ -29,14 +29,14 @@ export const PLANS = [
         amount: 19,
         priceIds: {
           test: '',
-          production: 'price_1PwkyVLqZXIo1J6dwuKYUk4I',
+          production: 'price_1T7sibLHSgRRnn5DBAyNexQu',
         },
       },
       yearly: {
         amount: 133,
         priceIds: {
           test: '',
-          production: 'price_1SNu5zLqZXIo1J6dMc9P5vSl',
+          production: '',
         },
       },
     },
@@ -50,35 +50,35 @@ export const PLANS = [
         amount: 39,
         priceIds: {
           test: '',
-          production: 'price_1PwkzpLqZXIo1J6d8eV0CnuK',
+          production: 'price_1T7sjWLHSgRRnn5DionEak0x',
         },
       },
       yearly: {
         amount: 273,
         priceIds: {
           test: '',
-          production: 'price_1SNu73LqZXIo1J6dPLNHq0ef', 
+          production: '',
         },
       },
     },
   },
   {
-    name: 'Business',
-    slug: 'business',
-    quota: -1,
+    name: 'Premium',
+    slug: 'premium',
+    quota: 50,
     price: {
       monthly: {
         amount: 79,
         priceIds: {
           test: '',
-          production: 'price_1QNAd5LqZXIo1J6dwEsexReQ',
+          production: 'price_1T7spOLHSgRRnn5DgQbnFpIk',
         },
       },
       yearly: {
         amount: 553,
         priceIds: {
           test: '',
-          production: 'price_1SNu85LqZXIo1J6dUq0X5BlH',
+          production: '',
         },
       },
     },

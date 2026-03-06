@@ -65,7 +65,8 @@ export async function POST(req: Request) {
       : maliciousInput;
     
     const data = await resend.emails.send({
-      from: 'VidNarrate Security 🛡️ <hello@vidnarrate.com>',
+      from: 'CasaVid Security 🛡️ <hello@send.casavid.com>',
+      replyTo: ['aimeromailbox@gmail.com'],
       to: [ADMIN_EMAIL],
       subject: `🛡️ Security Alert - ${userEmail}`,
       react: SecurityAlertEmail({ 

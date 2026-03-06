@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { db } from '@/firebase';
 import { ArrowLeft, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
-import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import { getDocs, collection, query, orderBy, where, deleteDoc, doc } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from 'next/navigation';
@@ -42,7 +42,35 @@ const DashboardPage = async () => {
   
   const showMaintenance = MAINTENANCE_MODE && isSubscribed;
 
+  // Cleanup failed videos older than 2 hours
+  const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
   const propertiesRef = collection(db, "users", userId, "properties");
+  
+  try {
+    const failedQuery = query(
+      propertiesRef,
+      where("status", "==", "failed")
+    );
+    const failedSnapshot = await getDocs(failedQuery);
+    
+    const deletePromises: Promise<void>[] = [];
+    failedSnapshot.docs.forEach((docSnapshot) => {
+      const data = docSnapshot.data();
+      const createdAt = data.createdAt?.seconds ? new Date(data.createdAt.seconds * 1000) : null;
+      
+      if (createdAt && createdAt < twoHoursAgo) {
+        deletePromises.push(deleteDoc(doc(db, "users", userId, "properties", docSnapshot.id)));
+      }
+    });
+    
+    if (deletePromises.length > 0) {
+      await Promise.all(deletePromises);
+      console.log(`Cleaned up ${deletePromises.length} old failed video(s) for user ${userId}`);
+    }
+  } catch (error) {
+    console.error('Error cleaning up old failed videos:', error);
+  }
+
   const q = query(propertiesRef, orderBy("createdAt", "desc"));
   const querySnapshot = await getDocs(q);
 
@@ -54,7 +82,11 @@ const DashboardPage = async () => {
       createdAt: {
         seconds: data.createdAt?.seconds || 0,
         nanoseconds: data.createdAt?.nanoseconds || 0
-      }
+      },
+      updatedAt: data.updatedAt ? {
+        seconds: data.updatedAt.seconds || 0,
+        nanoseconds: data.updatedAt.nanoseconds || 0
+      } : undefined
     } as Property;
   });
 

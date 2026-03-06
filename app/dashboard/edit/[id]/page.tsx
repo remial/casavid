@@ -29,9 +29,18 @@ export default async function EditPropertyPage({ params }: PageProps) {
     notFound();
   }
 
+  const data = propertyDoc.data();
   const property = {
     id: propertyDoc.id,
-    ...propertyDoc.data(),
+    ...data,
+    createdAt: data?.createdAt ? {
+      seconds: data.createdAt.seconds || 0,
+      nanoseconds: data.createdAt.nanoseconds || 0
+    } : undefined,
+    updatedAt: data?.updatedAt ? {
+      seconds: data.updatedAt.seconds || 0,
+      nanoseconds: data.updatedAt.nanoseconds || 0
+    } : undefined,
   };
 
   return (

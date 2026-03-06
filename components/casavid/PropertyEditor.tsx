@@ -88,10 +88,6 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
   };
 
   const handleGenerate = async () => {
-    if (!confirm('Generate video with current settings? This will use credits from your subscription.')) {
-      return;
-    }
-
     setIsGenerating(true);
     try {
       await handleSave();
@@ -279,7 +275,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
       </Card>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row justify-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
         <Button
           variant="outline"
           onClick={handleSave}
@@ -294,23 +290,26 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
           Save Draft
         </Button>
         
-        <Button
-          onClick={handleGenerate}
-          disabled={isGenerating || photos.length === 0}
-          className="bg-blue-600 hover:bg-blue-700 gap-2 px-8"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Starting...
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4" />
-              Generate Property Video
-            </>
-          )}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={handleGenerate}
+            disabled={isGenerating || photos.length === 0}
+            className="bg-blue-600 hover:bg-blue-700 gap-2 px-8"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Starting...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" />
+                Generate Property Video
+              </>
+            )}
+          </Button>
+          <span className="text-sm text-gray-500 font-medium">Costs 1 credit</span>
+        </div>
       </div>
       
       <p className="text-center text-sm text-gray-500">

@@ -3,9 +3,8 @@
 import { Property } from "@/app/dashboard/page";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Download, Edit, Loader2, Play, Trash2 } from "lucide-react";
+import { Download, Edit, Loader2, Play } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 interface PropertyCardProps {
   property: Property;
@@ -26,33 +25,9 @@ const statusLabels = {
 };
 
 export default function PropertyCard({ property }: PropertyCardProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  
   const thumbnailUrl = property.thumbnailUrl || property.photos?.[0]?.url || null;
   const createdDate = new Date(property.createdAt.seconds * 1000).toLocaleDateString();
   const title = property.title || `${property.propertyType || 'Property'} - ${property.bedrooms || '?'} bed`;
-
-  const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this property video?')) return;
-    
-    setIsDeleting(true);
-    try {
-      const response = await fetch(`/api/property/${property.id}`, {
-        method: 'DELETE',
-      });
-      
-      if (response.ok) {
-        window.location.reload();
-      } else {
-        alert('Failed to delete property');
-      }
-    } catch (error) {
-      console.error('Delete error:', error);
-      alert('Failed to delete property');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -131,20 +106,6 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </Button>
           </Link>
         )}
-        
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className="text-gray-400 hover:text-red-600"
-        >
-          {isDeleting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Trash2 className="w-4 h-4" />
-          )}
-        </Button>
       </CardFooter>
     </Card>
   );

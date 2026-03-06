@@ -1,8 +1,6 @@
-//components/MetaPix.tsx
 import Script from 'next/script';
 import { FC } from 'react';
 
-// Define props type for MetaPix
 interface MetaPixProps {
   event?: 'Purchase';
   value?: number;
@@ -10,20 +8,17 @@ interface MetaPixProps {
 }
 
 const MetaPix: FC<MetaPixProps> = ({ event, value, currency = 'USD' }) => {
-  const pixelId = '1305195783941000';
+  const pixelId = '2196454821184339';
 
-  // Build the Purchase event code with value and currency
   const getPurchaseEventCode = () => {
     if (event !== 'Purchase') return '';
     
     if (value && value > 0) {
       return `fbq('track', 'Purchase', {value: ${value}, currency: '${currency}'});`;
     }
-    // Fallback: still track purchase but without value (not ideal, but better than nothing)
     return `fbq('track', 'Purchase', {value: 0.00, currency: '${currency}'});`;
   };
 
-  // Build noscript URL with value and currency
   const getNoscriptUrl = () => {
     let url = `https://www.facebook.com/tr?id=${pixelId}&ev=PageView`;
     if (event === 'Purchase') {

@@ -22,10 +22,20 @@ interface UploadedPhoto {
 const propertyTypes = [
   { value: 'house', label: 'House' },
   { value: 'apartment', label: 'Apartment / Condo' },
+  { value: 'flat', label: 'Flat' },
   { value: 'townhouse', label: 'Townhouse' },
   { value: 'villa', label: 'Villa' },
+  { value: 'bungalow', label: 'Bungalow' },
+  { value: 'duplex', label: 'Duplex' },
+  { value: 'penthouse', label: 'Penthouse' },
   { value: 'studio', label: 'Studio' },
+  { value: 'loft', label: 'Loft' },
+  { value: 'cottage', label: 'Cottage' },
+  { value: 'cabin', label: 'Cabin' },
+  { value: 'farmhouse', label: 'Farmhouse' },
+  { value: 'land', label: 'Land / Plot' },
   { value: 'commercial', label: 'Commercial Space' },
+  { value: 'other', label: 'Other' },
 ];
 
 const bedroomOptions = ['Studio', '1', '2', '3', '4', '5+'];

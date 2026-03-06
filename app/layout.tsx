@@ -10,6 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { ModalProvider } from "@/components/providers/modal-provider";
 import Clarity from "@/components/Clarity";
+import MetaPix from "@/components/MetaPix";
 
 let title = "CasaVid - Turn Property Photos into Walkthrough Videos";
 let ogimage = 'https://www.casavid.com/ogimage1.png';
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: any) {
         <ClientProviders>
           <Provider>
             <FirebaseAuthProvider>
+              <MetaPix />
               <section className="sticky top-0 z-50 bg-white border-b border-gray-100">
                 <Suspense fallback={<div className="flex w-full px-4 lg:px-8 py-3 items-center justify-between h-[60px]" />}>
                   <Navbar />

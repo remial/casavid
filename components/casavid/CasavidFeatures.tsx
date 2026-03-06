@@ -6,9 +6,9 @@ export default function CasavidFeatures() {
       description: "Natural-sounding voice describes each room with engaging property details you provide."
     },
     {
-      icon: "📝",
-      title: "Auto-Generated Subtitles",
-      description: "Reach more buyers with built-in subtitles. Perfect for social media where videos autoplay muted."
+      icon: "🎯",
+      title: "Property-Focused Scripts",
+      description: "AI writes compelling narration tailored to your property's unique features and selling points."
     },
     {
       icon: "🎬",
@@ -22,8 +22,8 @@ export default function CasavidFeatures() {
     },
     {
       icon: "📱",
-      title: "Social Media Ready",
-      description: "Export in formats optimized for YouTube, Instagram, Facebook, TikTok, and MLS listings."
+      title: "Easy to Share",
+      description: "Download your video and share it anywhere — social media, listing websites, email campaigns, or client presentations."
     },
     {
       icon: "🏷️",

@@ -50,7 +50,7 @@ export default async function Index() {
                 <p className="font-medium">Create professional property videos in 3 easy steps:</p>
                 <p>1. Upload 1-10 photos of any property</p>
                 <p>2. Choose video length and style</p>
-                <p>3. Get your video with AI narration &amp; subtitles!</p>
+                <p>3. Get your professional walkthrough video!</p>
               </div>
             </div>
 

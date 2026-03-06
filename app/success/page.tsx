@@ -2,7 +2,6 @@
 "use client"
 
 import MetaPix from "@/components/MetaPix";
-import SnapPix from "@/components/SnapPix";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
@@ -126,10 +125,7 @@ const Success: React.FC = () => {
     <div className="flex flex-col items-center min-h-screen py-6 px-4 bg-gray-50 text-center relative">
       {/* Only fire Meta/Snap pixels on legitimate purchases from Stripe (prevents duplicate tracking on back button) */}
       {shouldTrackMeta && purchaseAmount !== null && (
-        <>
-          <MetaPix event="Purchase" value={purchaseAmount} currency={purchaseCurrency} />
-          <SnapPix event="PURCHASE" /> {/* Track Snapchat purchase conversion */}
-        </>
+        <MetaPix event="Purchase" value={purchaseAmount} currency={purchaseCurrency} />
       )}
       
       {showConfetti && (

@@ -13,7 +13,7 @@ export default function CasavidHowItWorks() {
     {
       icon: "3️⃣",
       title: "Get Your Video",
-      description: "Our AI creates a professional walkthrough video with smooth transitions, narration, and subtitles"
+      description: "Our AI creates a professional walkthrough video with smooth transitions and engaging narration"
     }
   ];
 

@@ -12,16 +12,20 @@ const faqs = [
     answer: "The AI generates a professional script based on the property details you provide (square footage, bedrooms, special features). It describes each room naturally, highlighting selling points in a warm, engaging tone."
   },
   {
-    question: "Can I edit the narration script?",
-    answer: "Yes! You can provide your own script or edit the AI-generated one before the video is created. Pro and Business plans include unlimited script revisions."
-  },
-  {
-    question: "What video formats are supported?",
-    answer: "We export in MP4 format with options for landscape (16:9 for YouTube/websites), square (1:1 for Instagram), and portrait (9:16 for TikTok/Reels). All exports include embedded subtitles."
-  },
-  {
     question: "How long does it take to create a video?",
-    answer: "Most videos are ready in 2-5 minutes depending on length and complexity. Business plan users get priority processing for even faster turnaround."
+    answer: "Most videos are ready in 2-5 minutes depending on length and complexity."
+  },
+  {
+    question: "What photo quality works best?",
+    answer: "Use well-lit, high-resolution photos for the best results. Horizontal/landscape photos work better than vertical ones. Avoid blurry images or photos with excessive clutter — clean, staged rooms create more professional videos."
+  },
+  {
+    question: "How should I order my photos?",
+    answer: "Upload photos in the order you want them to appear in the video. A natural flow works best: start with exterior/entrance, then move through main living areas, kitchen, bedrooms, bathrooms, and finish with outdoor spaces or special features."
+  },
+  {
+    question: "What property details should I include?",
+    answer: "Include key selling points like number of bedrooms/bathrooms, notable features (updated kitchen, hardwood floors, pool), neighborhood highlights, and any recent renovations. The more details you provide, the better the AI narration will be."
   }
 ];
 

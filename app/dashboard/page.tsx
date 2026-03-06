@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { db } from '@/firebase';
-import { ArrowLeft, Loader2, Plus } from "lucide-react";
+import { ArrowLeft, Coins, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
 import { getDocs, collection, query, orderBy, where, deleteDoc, doc } from "firebase/firestore";
 import { getServerSession } from "next-auth";
@@ -35,6 +35,7 @@ const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   const isSubscribed = session?.user?.isSubscribed ?? false;
+  const credits = session?.user?.credits ?? 0;
   
   if (!userId) {
     redirect('/');
@@ -106,12 +107,20 @@ const DashboardPage = async () => {
               <h1 className="text-3xl font-bold text-gray-900">My Property Videos</h1>
             </div>
             
-            <Link href="/dashboard/create">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
-                <Plus className="w-5 h-5" />
-                Create Property Video
-              </Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              {isSubscribed && (
+                <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
+                  <Coins className="w-5 h-5 text-amber-600" />
+                  <span className="font-semibold text-amber-700">{credits}</span>
+                </div>
+              )}
+              <Link href="/dashboard/create">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+                  <Plus className="w-5 h-5" />
+                  Create Property Video
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {showMaintenance && (

@@ -215,41 +215,32 @@ export const authOptions: NextAuthOptions = {
                             }
                         });
                         
-                        // Send welcome email AFTER transaction successfully commits
-                        if (shouldSendWelcomeEmail) {
-                            // Use a separate transaction to atomically verify and claim the email send
-                            // This prevents duplicate emails when multiple session callbacks run concurrently
-                            try {
-                                let emailShouldBeSent = false;
-                                await adminDB.runTransaction(async (emailTransaction) => {
-                                    const emailDoc = await emailTransaction.get(userRef);
-                                    const emailData = emailDoc.data();
-                                    
-                                    // Only send if welcomeEmailSent is true (set by our previous transaction)
-                                    // and hasn't been sent yet (we'll use a separate flag or check timestamp)
-                                    if (emailData?.welcomeEmailSent === true) {
-                                        // Check if email was already sent by checking a sent timestamp
-                                        if (!emailData?.welcomeEmailSentAt) {
-                                            // Atomically set timestamp to claim this email send
-                                            emailTransaction.set(userRef, { 
-                                                welcomeEmailSentAt: admin.firestore.FieldValue.serverTimestamp() 
-                                            }, { merge: true });
-                                            emailShouldBeSent = true;
-                                        }
-                                    }
-                                });
-                                
-                                if (emailShouldBeSent) {
-                                    await sendWelcomeEmail(shouldSendWelcomeEmail);
-                                } else {
-                                    console.log("Welcome email already sent by another request, skipping duplicate");
-                                }
-                            } catch (emailError) {
-                                console.error("Error in email send verification transaction:", emailError);
-                                // Fallback: send email if verification fails (better to send duplicate than miss it)
-                                await sendWelcomeEmail(shouldSendWelcomeEmail);
-                            }
-                        }
+                        // DISABLED: Welcome email temporarily disabled
+                        // if (shouldSendWelcomeEmail) {
+                        //     try {
+                        //         let emailShouldBeSent = false;
+                        //         await adminDB.runTransaction(async (emailTransaction) => {
+                        //             const emailDoc = await emailTransaction.get(userRef);
+                        //             const emailData = emailDoc.data();
+                        //             if (emailData?.welcomeEmailSent === true) {
+                        //                 if (!emailData?.welcomeEmailSentAt) {
+                        //                     emailTransaction.set(userRef, { 
+                        //                         welcomeEmailSentAt: admin.firestore.FieldValue.serverTimestamp() 
+                        //                     }, { merge: true });
+                        //                     emailShouldBeSent = true;
+                        //                 }
+                        //             }
+                        //         });
+                        //         if (emailShouldBeSent) {
+                        //             await sendWelcomeEmail(shouldSendWelcomeEmail);
+                        //         } else {
+                        //             console.log("Welcome email already sent by another request, skipping duplicate");
+                        //         }
+                        //     } catch (emailError) {
+                        //         console.error("Error in email send verification transaction:", emailError);
+                        //         await sendWelcomeEmail(shouldSendWelcomeEmail);
+                        //     }
+                        // }
                         
                     } catch (error) {
                         console.error("Error accessing Firestore:", error);

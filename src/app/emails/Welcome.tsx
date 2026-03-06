@@ -42,7 +42,7 @@ export const WelcomeEmail = () => {
       >
         <Body className="bg-offwhite text-base font-sans">
           <Img
-            src={`${baseUrl}/logo.png`}
+            src={`${baseUrl}/homespg.png`}
             width="100"
             height="75"
             alt="CasaVid"

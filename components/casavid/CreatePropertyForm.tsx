@@ -117,6 +117,16 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
     setIsSubmitting(true);
 
     try {
+      // Check credits FIRST before doing anything else
+      const creditCheckRes = await fetch('/api/user/checkCreditsAndSubscription');
+      const creditData = await creditCheckRes.json();
+      
+      if (creditData.credits <= 0) {
+        alert('You need credits to create a video. Please purchase credits to continue.');
+        router.push('/pricing');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('propertyType', propertyType);
       formData.append('bedrooms', bedrooms);
@@ -136,7 +146,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
 
       const data = await response.json();
 
-      // Handle insufficient credits
+      // Handle insufficient credits (backup check)
       if (response.status === 402) {
         alert(data.message || 'You need credits to create a video. Please purchase credits to continue.');
         if (data.redirectTo) {

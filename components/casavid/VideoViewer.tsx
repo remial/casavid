@@ -27,24 +27,6 @@ export default function VideoViewer({
   highlights,
   thumbnailUrl,
 }: VideoViewerProps) {
-  
-  const handleDownload = async () => {
-    try {
-      const response = await fetch(videoUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${title}.mp4`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error('Download failed:', err);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto p-4 lg:p-6">
@@ -57,14 +39,12 @@ export default function VideoViewer({
             </Button>
           </Link>
           
-          <Button 
-            size="sm" 
-            className="gap-1 bg-green-600 text-white hover:bg-green-700"
-            onClick={handleDownload}
-          >
-            <Download className="w-4 h-4" />
-            Download
-          </Button>
+          <a href={`/api/property/${propertyId}/download`}>
+            <Button size="sm" className="gap-1 bg-green-600 text-white hover:bg-green-700">
+              <Download className="w-4 h-4" />
+              Download
+            </Button>
+          </a>
         </div>
 
         {/* Video Player */}
@@ -97,14 +77,13 @@ export default function VideoViewer({
           )}
 
           <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap gap-3">
-            <Button 
-              className="flex-1  text-white sm:flex-none gap-2 bg-green-600 hover:bg-green-700"
-              onClick={handleDownload}
-            >
-              <Download className="w-4 h-4" />
-              Download Video
-            </Button>
-            {/* Will Implement Edit & Regenerate later
+            <a href={`/api/property/${propertyId}/download`} className="flex-1 sm:flex-none">
+              <Button className="w-full sm:w-auto gap-2 bg-green-600 text-white hover:bg-green-700">
+                <Download className="w-4 h-4" />
+                Download Video
+              </Button>
+            </a>
+            {/* Will Implement Edit & Regenerate later 
             <Link href={`/dashboard/edit/${propertyId}`} className="flex-1 sm:flex-none">
               <Button variant="outline" className="w-full sm:w-auto">
                 Edit & Regenerate

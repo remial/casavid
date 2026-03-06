@@ -138,29 +138,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                 View
               </Button>
             </Link>
-            <Button 
-              className="flex-1 gap-1 bg-green-600 hover:bg-green-700 text-white"
-              onClick={async (e) => {
-                e.preventDefault();
-                try {
-                  const response = await fetch(currentStatus.videoUrl!);
-                  const blob = await response.blob();
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `${property.title || 'property-video'}.mp4`;
-                  document.body.appendChild(a);
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                  document.body.removeChild(a);
-                } catch (err) {
-                  console.error('Download failed:', err);
-                }
-              }}
-            >
-              <Download className="w-4 h-4" />
-              Download
-            </Button>
+            <a href={`/api/property/${property.id}/download`} className="flex-1">
+              <Button className="w-full gap-1 bg-green-600 hover:bg-green-700 text-white">
+                <Download className="w-4 h-4" />
+                Download
+              </Button>
+            </a>
           </>
         )}
         

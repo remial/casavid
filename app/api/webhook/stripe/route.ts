@@ -372,6 +372,36 @@ export async function POST(req: Request) {
 
       // Get the subscription ID that failed
       const failedSubscriptionId = invoice.subscription as string | null;
+      
+      // ─────────────────────────────────────────────────────────────────────────────
+      // CRITICAL: Check if this is a 3D Secure payment in progress
+      // When 3DS is required, Stripe fires invoice.payment_failed BEFORE the customer
+      // has completed authentication. We should NOT zero out or send pause emails
+      // for subscriptions that are still "incomplete" (awaiting 3DS completion).
+      // ─────────────────────────────────────────────────────────────────────────────
+      if (failedSubscriptionId) {
+        try {
+          const subscription = await stripe.subscriptions.retrieve(failedSubscriptionId);
+          
+          // Skip if subscription is "incomplete" - payment is still pending (e.g., 3DS in progress)
+          if (subscription.status === 'incomplete') {
+            console.log(`⏭️ Skipping invoice.payment_failed for subscription ${failedSubscriptionId} - status is "incomplete" (likely 3DS in progress)`);
+            return NextResponse.json({ success: true }, { status: 200 });
+          }
+          
+          // Also skip for "past_due" on new subscriptions - billing_reason tells us if it's new vs renewal
+          // "subscription_create" = new subscription, "subscription_cycle" = renewal
+          if (invoice.billing_reason === 'subscription_create' && subscription.status !== 'canceled') {
+            console.log(`⏭️ Skipping invoice.payment_failed for NEW subscription ${failedSubscriptionId} (billing_reason: ${invoice.billing_reason}, status: ${subscription.status}). Customer may still complete payment.`);
+            return NextResponse.json({ success: true }, { status: 200 });
+          }
+          
+          console.log(`Processing invoice.payment_failed for subscription ${failedSubscriptionId} (status: ${subscription.status}, billing_reason: ${invoice.billing_reason})`);
+        } catch (subError) {
+          console.error('Error retrieving subscription for payment_failed check:', subError);
+          // Continue with normal processing if we can't retrieve the subscription
+        }
+      }
 
       // Check if customer has other ACTIVE subscriptions before zeroing out
       const activeSubscriptions = await stripe.subscriptions.list({

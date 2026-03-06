@@ -60,7 +60,7 @@ export const WelcomeEmail = () => {
                 </Text>
 
                 <Text className="text-base mt-4">
-                  <strong>Use code <span style={{ color: '#16a34a' }}>REMOVE20</span> today for <span style={{ color: '#16a34a' }}>20% OFF</span> your first subscription!</strong>
+                  <strong>Use code <span style={{ color: '#2563eb' }}>REMOVE20</span> today for <span style={{ color: '#2563eb' }}>20% OFF</span> your first subscription!</strong>
                 </Text>
 
                 <Text className="text-base mt-4">

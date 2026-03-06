@@ -41,13 +41,6 @@ export const WelcomeEmail = () => {
         }}
       >
         <Body className="bg-offwhite text-base font-sans">
-          <Img
-            src={`${baseUrl}/homespg.png`}
-            width="100"
-            height="75"
-            alt="CasaVid"
-            className="mx-auto my-20"
-          />
           <Container className="bg-white p-45">
             <Heading className="text-center my-0 leading-8">
               Welcome to CasaVid 🏠
@@ -82,6 +75,13 @@ export const WelcomeEmail = () => {
               Questions? Just reply to this email - we're here to help!
             </Text>
           </Container>
+          <Img
+            src={`${baseUrl}/homespg.png`}
+            width="100"
+            height="75"
+            alt="CasaVid"
+            className="mx-auto my-20"
+          />
         </Body>
       </Tailwind>
     </Html>

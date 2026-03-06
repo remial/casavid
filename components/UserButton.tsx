@@ -83,9 +83,9 @@ return session && (
               
               <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => window.location.href = '/settings'}> Settings </DropdownMenuItem>*/}
               
-              {session.user?.isSubscribed && (
+              {/* {session.user?.isSubscribed && (
                 <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => window.location.href = '/subscriptions'}> Billing </DropdownMenuItem>
-              )}
+              )} */}
            
               <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => signOut ({ callbackUrl: '/' })}> Log Out </DropdownMenuItem>
             </DropdownMenuContent>

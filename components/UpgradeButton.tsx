@@ -8,8 +8,8 @@ import { PLANS } from '@/src/config/stripe';
 
 // Adding index signature to allow any string key
 const promotionCodeMap: { [key: string]: string } = {
-  REMOVE20: 'promo_1QGajlLqZXIo1J6dn3VLXRTn',
-  remove20: 'promo_1QGajlLqZXIo1J6dn3VLXRTn', // example mapping
+  REMOVE20: 'promo_1T7vCPLHSgRRnn5DXAEMbNQO',
+  remove20: 'promo_1T7vCPLHSgRRnn5DXAEMbNQO', // example mapping
   //CCMBF30:  'promo_1QPLS5LqZXIo1J6dHX2UIM3m',
 };
 

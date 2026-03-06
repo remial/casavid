@@ -1,8 +1,8 @@
 {
-    "functions": {
-      "pages/api/**/*.ts": {
-        "maxDuration": 60
-      }
+  "functions": {
+    "app/api/**/route.ts": {
+      "maxDuration": 60
     }
   }
+}
   

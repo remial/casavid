@@ -7,7 +7,6 @@ import {
   Heading,
   Html,
   Img,
-  Link,
   Preview,
   Row,
   Section,
@@ -23,13 +22,13 @@ export const WelcomeEmail = () => {
   return (
     <Html>
       <Head />
-      <Preview>Welcome to CasaVid! Transform your property photos into stunning videos</Preview>
+      <Preview>Welcome to CasaVid! Get 20% off with code REMOVE20</Preview>
       <Tailwind
         config={{
           theme: {
             extend: {
               colors: {
-                brand: "#2563eb",
+                brand: "#16a34a",
                 offwhite: "#fafbfb",
               },
               spacing: {
@@ -61,47 +60,23 @@ export const WelcomeEmail = () => {
                 </Text>
 
                 <Text className="text-base mt-4">
-                  CasaVid transforms your property photos into professional, AI-narrated video tours in minutes. Perfect for real estate agents, property managers, and homeowners.
+                  <strong>Use code <span style={{ color: '#16a34a' }}>REMOVE20</span> today for <span style={{ color: '#16a34a' }}>20% OFF</span> your first subscription!</strong>
                 </Text>
 
                 <Text className="text-base mt-4">
-                  Here's how to create your first property video:
+                  Transform your property photos into professional, AI-narrated video tours in minutes.
                 </Text>
               </Row>
             </Section>
 
-            <ul>
-              <li className="mb-20">
-                <strong>1. Upload Your Photos</strong> - Add 1-10 high-quality photos of your property
-              </li>
-              <li className="mb-20">
-                <strong>2. Add Property Details</strong> - Specify bedrooms, bathrooms, and key features
-              </li>
-              <li className="mb-20">
-                <strong>3. Choose Your Style</strong> - Select video length and narrator voice
-              </li>
-              <li className="mb-20">
-                <strong>4. Generate & Share</strong> - Get your professional video tour ready to share!
-              </li>
-            </ul>
-
-            <div className="flex justify-center">
+            <Section style={{ textAlign: 'center', marginTop: '20px' }}>
               <Button
-                className="bg-blue-600 text-white rounded-lg py-3 px-[18px]"
+                className="bg-green-600 text-white rounded-lg py-3 px-[18px]"
                 href={`${baseUrl}/dashboard`}
               >
                 Create Your First Video
               </Button>
-            </div>
-
-            <div className="flex justify-center mt-4">
-              <Img
-                src={`${baseUrl}/samples.png`}
-                alt="CasaVid property video samples"
-                width="100%"
-                className="rounded-lg shadow-lg"
-              />
-            </div>
+            </Section>
 
             <Text className="text-base mt-4 text-center">
               Questions? Just reply to this email - we're here to help!

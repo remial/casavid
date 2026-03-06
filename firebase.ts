@@ -6,12 +6,12 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCQsUnf-520fdiBH-SoSX6rfdyGE61HnYE",
-  authDomain: "casavid1.firebaseapp.com",
-  projectId: "casavid1",
-  storageBucket: "casavid1.firebasestorage.app",
-  messagingSenderId: "810482997112",
-  appId: "1:810482997112:web:ee685a920c77cf60741a8d"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
   async function uploadFileToFirebase(image_url: string, name: string) {

@@ -9,6 +9,7 @@ import Provider from "@/components/Provider";
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { ModalProvider } from "@/components/providers/modal-provider";
+import Clarity from "@/components/Clarity";
 
 let title = "CasaVid - Turn Property Photos into Walkthrough Videos";
 let ogimage = 'https://www.casavid.com/ogimage1.png';
@@ -43,7 +44,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: any) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <Clarity />
+      </head>
       <body className="flex flex-col min-h-screen bg-white" suppressHydrationWarning>
         <ClientProviders>
           <Provider>

@@ -39,38 +39,52 @@ const MobileNav: React.FC<SessionProps> = ({ session }) => {
           <Separator className="border border-gray-200" />
           
           <div className="flex flex-col gap-2">
-            <Link
-              href="/#testimonials"
-              className="text-gray-600 hover:text-blue-600"
-              onClick={() => setOpen(false)}
-            >
-              <Button variant="ghost" className="w-full justify-start text-base">
-                Reviews
-              </Button>
-            </Link>
-            
-            <Link
-              href="/#how-it-works"
-              className="text-gray-600 hover:text-blue-600"
-              onClick={() => setOpen(false)}
-            >
-              <Button variant="ghost" className="w-full justify-start text-base">
-                How It Works
-              </Button>
-            </Link>
-            
-            <Link
-              href="/#faq"
-              className="text-gray-600 hover:text-blue-600"
-              onClick={() => setOpen(false)}
-            >
-              <Button variant="ghost" className="w-full justify-start text-base">
-                FAQ
-              </Button>
-            </Link>
+            {!session && (
+              <>
+                <Link
+                  href="/#testimonials"
+                  className="text-gray-600 hover:text-blue-600"
+                  onClick={() => setOpen(false)}
+                >
+                  <Button variant="ghost" className="w-full justify-start text-base">
+                    Reviews
+                  </Button>
+                </Link>
+                
+                <Link
+                  href="/#how-it-works"
+                  className="text-gray-600 hover:text-blue-600"
+                  onClick={() => setOpen(false)}
+                >
+                  <Button variant="ghost" className="w-full justify-start text-base">
+                    How It Works
+                  </Button>
+                </Link>
+                
+                <Link
+                  href="/#faq"
+                  className="text-gray-600 hover:text-blue-600"
+                  onClick={() => setOpen(false)}
+                >
+                  <Button variant="ghost" className="w-full justify-start text-base">
+                    FAQ
+                  </Button>
+                </Link>
+              </>
+            )}
 
             {session && (
               <>
+                <Link
+                  href="/dashboard"
+                  className="text-gray-600 hover:text-blue-600"
+                  onClick={() => setOpen(false)}
+                >
+                  <Button variant="ghost" className="w-full justify-start text-base">
+                    Dashboard
+                  </Button>
+                </Link>
+
                 <Link
                   href="/pricing"
                   prefetch={false}
@@ -79,17 +93,6 @@ const MobileNav: React.FC<SessionProps> = ({ session }) => {
                 >
                   <Button variant="ghost" className="w-full justify-start text-base">
                     Pricing
-                  </Button>
-                </Link>
-
-                <Link
-                  href="/dashboard"
-                  onClick={() => setOpen(false)}
-                >
-                  <Button 
-                    className="w-full text-base mt-2 bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    Create Video
                   </Button>
                 </Link>
               </>

@@ -156,13 +156,21 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
       }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create property');
+        const errorMsg = data.details || data.error || 'Failed to create property';
+        throw new Error(errorMsg);
       }
 
       router.push(`/dashboard/edit/${data.propertyId}`);
     } catch (error) {
       console.error('Error creating property:', error);
-      alert('Failed to create property. Please try again.');
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      if (message.includes('storage') || message.includes('bucket')) {
+        alert('Failed to upload photos. Please try again with smaller images or fewer photos.');
+      } else if (message.includes('timeout') || message.includes('network')) {
+        alert('Upload timed out. Please check your connection and try again.');
+      } else {
+        alert(`Failed to create property: ${message}`);
+      }
     } finally {
       setIsSubmitting(false);
     }

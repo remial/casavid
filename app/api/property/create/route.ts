@@ -49,7 +49,13 @@ export async function POST(request: NextRequest) {
     const voiceStyle = formData.get('voiceStyle') as string;
 
     const photos: Array<{ url: string; order: number; caption: string; duration: number }> = [];
-    const bucket = storage.bucket(process.env.FIREBASE_STORAGE_BUCKET);
+    
+    const bucketName = process.env.FIREBASE_STORAGE_BUCKET;
+    if (!bucketName) {
+      console.error('FIREBASE_STORAGE_BUCKET environment variable is not set');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+    const bucket = storage.bucket(bucketName);
 
     let photoIndex = 0;
     while (formData.has(`photo_${photoIndex}`)) {
@@ -120,8 +126,10 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error creating property:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error details:', errorMessage);
     return NextResponse.json(
-      { error: 'Failed to create property' },
+      { error: 'Failed to create property', details: errorMessage },
       { status: 500 }
     );
   }

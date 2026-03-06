@@ -115,7 +115,7 @@ const DashboardPage = async () => {
                 </div>
               )}
               <Link href="/dashboard/create">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+                <Button className="bg-green-600 hover:bg-green-700 text-white gap-2">
                   <Plus className="w-5 h-5" />
                   Create Property Video
                 </Button>
@@ -145,7 +145,7 @@ const DashboardPage = async () => {
               <h2 className="text-xl text-gray-600 mb-2">No property videos yet</h2>
               <p className="text-gray-500 mb-6">Upload photos and create your first property walkthrough video</p>
               <Link href="/dashboard/create">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+                <Button className="bg-green-600 hover:bg-green-700 text-white gap-2">
                   <Plus className="w-5 h-5" />
                   Create Your First Video
                 </Button>

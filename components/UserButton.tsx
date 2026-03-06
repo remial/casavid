@@ -74,19 +74,9 @@ return session && (
             <DropdownMenuTrigger>
             <UserAvatarWrapper name={session.user?.name || ''} image={session.user?.image} />
            </DropdownMenuTrigger>
-           <DropdownMenuContent className="w-60 h-35 flex flex-col items-start bg-white">
-            <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-primary text-center text-lg text-green-700 overflow-hidden text-ellipsis">{session.user?.name || session.user?.email}</DropdownMenuLabel>
-              {/* <DropdownMenuLabel className="text-primary text-center text-sm text-green-500 overflow-hidden text-ellipsis"><span className="text-gray-900">Credits Left:</span> {session.user?.credits}</DropdownMenuLabel>
-             session.user?.isSubscribed && (
-                <DropdownMenuItem className="font-bold cursor-pointer text-gray-500" onClick={handleBillingClick}> Manage Billing </DropdownMenuItem>
-              
-              <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => window.location.href = '/settings'}> Settings </DropdownMenuItem>*/}
-              
-              {/* {session.user?.isSubscribed && (
-                <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => window.location.href = '/subscriptions'}> Billing </DropdownMenuItem>
-              )} */}
-           
+           <DropdownMenuContent className="w-60 flex flex-col items-start bg-white">
+              <DropdownMenuLabel className="text-primary text-lg text-green-700 overflow-hidden text-ellipsis w-full">{session.user?.name || session.user?.email}</DropdownMenuLabel>
+              <DropdownMenuSeparator className="w-full" />
               <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => signOut ({ callbackUrl: '/' })}> Log Out </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

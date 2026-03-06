@@ -112,8 +112,8 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
     ));
   };
 
-  const handleSave = async () => {
-    setIsSaving(true);
+  const handleSave = async (silent = false) => {
+    if (!silent) setIsSaving(true);
     try {
       const response = await fetch(`/api/property/${property.id}/save`, {
         method: 'PUT',
@@ -125,16 +125,17 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
       
     } catch (error) {
       console.error('Save error:', error);
-      alert('Failed to save changes');
+      if (!silent) alert('Failed to save changes');
+      throw error;
     } finally {
-      setIsSaving(false);
+      if (!silent) setIsSaving(false);
     }
   };
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      await handleSave();
+      await handleSave(true);
 
       const response = await fetch(`/api/property/${property.id}/generate`, {
         method: 'POST',
@@ -256,11 +257,11 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
     <div className="space-y-6">
       {/* Photo Order */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+        <CardHeader className="pb-2 sm:pb-6">
+          <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
             <span>Photo Order & Captions</span>
             <span className="text-sm font-normal text-gray-500">
-              Drag to reorder • Total: {totalDuration}s
+              Total: {totalDuration}s
             </span>
           </CardTitle>
         </CardHeader>
@@ -277,22 +278,23 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                 onDragStart={() => handleDragStart(index)}
                 onDragOver={(e) => handleDragOver(e, index)}
                 onDragEnd={handleDragEnd}
-                className={`flex items-center gap-4 p-3 bg-white border rounded-lg cursor-move transition-all ${
+                className={`p-3 sm:p-4 bg-white border rounded-lg cursor-move transition-all ${
                   draggedIndex === index ? 'opacity-50 scale-95' : ''
                 }`}
               >
-                <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                
-                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                  <img 
-                    src={photo.url} 
-                    alt={`Photo ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                <div className="flex-grow space-y-2">
-                  <div>
+                {/* Desktop: horizontal layout */}
+                <div className="hidden sm:flex items-center gap-4">
+                  <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  
+                  <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      src={photo.url} 
+                      alt={`Photo ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  <div className="flex-grow">
                     <Label className="text-xs text-gray-500">Caption (optional)</Label>
                     <Input
                       value={photo.caption}
@@ -301,22 +303,64 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                       className="text-sm"
                     />
                   </div>
+                  
+                  <div className="w-24 flex-shrink-0">
+                    <Label className="text-xs text-gray-500">Duration (s)</Label>
+                    <Input
+                      type="number"
+                      min={2}
+                      max={15}
+                      value={photo.duration}
+                      onChange={(e) => updateDuration(index, parseInt(e.target.value) || 5)}
+                      className="text-sm text-center"
+                    />
+                  </div>
+                  
+                  <div className="flex-shrink-0 w-8 text-center text-sm font-medium text-gray-400">
+                    #{index + 1}
+                  </div>
                 </div>
-                
-                <div className="flex-shrink-0 w-24">
-                  <Label className="text-xs text-gray-500">Duration (s)</Label>
-                  <Input
-                    type="number"
-                    min={2}
-                    max={15}
-                    value={photo.duration}
-                    onChange={(e) => updateDuration(index, parseInt(e.target.value) || 5)}
-                    className="text-sm text-center"
-                  />
-                </div>
-                
-                <div className="flex-shrink-0 w-8 text-center text-sm font-medium text-gray-400">
-                  #{index + 1}
+
+                {/* Mobile: stacked layout with caption below photo */}
+                <div className="sm:hidden space-y-3">
+                  <div className="flex items-center gap-3">
+                    <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    
+                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={photo.url} 
+                        alt={`Photo ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    <div className="flex-grow flex items-center justify-between">
+                      <div className="w-20">
+                        <Label className="text-xs text-gray-500">Duration (s)</Label>
+                        <Input
+                          type="number"
+                          min={2}
+                          max={15}
+                          value={photo.duration}
+                          onChange={(e) => updateDuration(index, parseInt(e.target.value) || 5)}
+                          className="text-sm text-center"
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-gray-400">
+                        #{index + 1}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-xs text-gray-500">Caption (optional)</Label>
+                    <Input
+                      value={photo.caption}
+                      onChange={(e) => updateCaption(index, e.target.value)}
+                      placeholder="e.g., Spacious living room"
+                      className="text-base h-11"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -361,8 +405,8 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
       <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
         <Button
           variant="outline"
-          onClick={handleSave}
-          disabled={isSaving}
+          onClick={() => handleSave()}
+          disabled={isSaving || isGenerating}
           className="gap-2"
         >
           {isSaving ? (
@@ -377,21 +421,23 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || photos.length === 0}
-            className="bg-blue-600 hover:bg-blue-700 gap-2 px-8"
+            className="bg-green-600 hover:bg-green-700 text-white gap-2 px-8 font-semibold"
           >
             {isGenerating ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Starting...
+                Generating...
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                Generate Property Video
+                Generate Video
               </>
             )}
           </Button>
-          <span className="text-sm text-gray-500 font-medium">Costs 1 credit</span>
+          <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+            1 credit
+          </span>
         </div>
       </div>
       

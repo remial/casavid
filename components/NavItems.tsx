@@ -46,6 +46,18 @@ const NavItems: React.FC<NavItemsProps> = ({ session, onNavigate }) => {
 
       {session && (
         <Link
+          href="/dashboard"
+          className="text-gray-600 hover:text-blue-600"
+          onClick={() => onNavigate?.()}
+        >
+          <Button variant="ghost" className="text-base">
+            Dashboard
+          </Button>
+        </Link>
+      )}
+
+      {session && (
+        <Link
           href="/pricing"
           prefetch={false}
           className="text-gray-600 hover:text-blue-600"
@@ -53,19 +65,6 @@ const NavItems: React.FC<NavItemsProps> = ({ session, onNavigate }) => {
         >
           <Button variant="ghost" className="text-base">
             Pricing
-          </Button>
-        </Link>
-      )}
-
-      {session && (
-        <Link
-          href="/dashboard"
-          onClick={() => onNavigate?.()}
-        >
-          <Button 
-            className="text-base ml-2 bg-green-600 hover:bg-blue-700 text-white"
-          >
-            Create Video
           </Button>
         </Link>
       )}

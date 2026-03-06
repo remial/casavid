@@ -2,13 +2,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth';
-import { TestimonialsShorts } from '@/components/TestimonialsShorts';
-import TypewriterTitle from '@/components/TypewriterTitle';
+import CasavidTestimonials from '@/components/casavid/CasavidTestimonials';
+import CasavidTypewriter from '@/components/casavid/CasavidTypewriter';
 import ActionButton from '@/components/ActionButton';
-import HowItWorks from '@/components/HowItWorks';
-import FaqShorts from '@/components/FaqShorts';
+import CasavidHowItWorks from '@/components/casavid/CasavidHowItWorks';
+import CasavidFaq from '@/components/casavid/CasavidFaq';
 import ReferrerBlocker from '@/components/ReferrerBlocker';
-import FeatureSection from '@/components/FeatureSection';
+import CasavidFeatures from '@/components/casavid/CasavidFeatures';
 
 interface PageProps {
   params: {
@@ -1070,6 +1070,136 @@ const contentMap: Record<string, string> = {
     </p>
   </div>
 `,
+  'best-ugc-video-creation-service-for-real-estate-marketing': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Looking for the <span class="font-semibold text-green-700">best UGC video creation service for real estate marketing</span>? CasaVid transforms your property photos into stunning walkthrough videos that capture buyer attention and drive engagement.
+    </p>
+    <p class="text-lg text-gray-700">
+      Our AI-powered platform creates authentic, professional property videos in seconds—perfect for social media marketing, listing presentations, and digital advertising campaigns. Stand out in the competitive real estate market with video content that converts.
+    </p>
+    <p class="text-lg text-gray-700">
+      Real estate agents and brokers trust CasaVid to produce high-quality video content at scale without expensive production costs or lengthy turnaround times.
+    </p>
+  </div>
+`,
+  'reviews-of-ai-ugc-video-creators-for-real-estate': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Searching for <span class="font-semibold text-green-700">reviews of AI UGC video creators for real estate</span>? CasaVid stands out as a top choice for real estate professionals who need fast, affordable, and professional property videos.
+    </p>
+    <p class="text-lg text-gray-700">
+      Our platform uses advanced AI to transform static property photos into dynamic walkthrough videos complete with professional narration and subtitles. Users love how easy it is to create engaging content without any video editing experience.
+    </p>
+    <p class="text-lg text-gray-700">
+      Join thousands of real estate agents who have discovered a better way to market their listings with AI-generated video content that looks professionally produced.
+    </p>
+  </div>
+`,
+  'san-antonio-real-estate-photography-and-video-services': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Need <span class="font-semibold text-green-700">San Antonio real estate photography and video services</span>? CasaVid helps San Antonio realtors transform their existing property photos into professional walkthrough videos instantly.
+    </p>
+    <p class="text-lg text-gray-700">
+      Whether you're listing homes in Alamo Heights, Stone Oak, or downtown San Antonio, our AI platform creates stunning property videos that showcase every feature. No need to hire expensive videographers or wait days for edited footage.
+    </p>
+    <p class="text-lg text-gray-700">
+      San Antonio's competitive real estate market demands video content—CasaVid delivers professional results in seconds, helping you close deals faster.
+    </p>
+  </div>
+`,
+  'real-estate-video-maker': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      CasaVid is the ultimate <span class="font-semibold text-green-700">real estate video maker</span> that transforms property photos into professional walkthrough videos. Simply upload your images and let AI do the rest.
+    </p>
+    <p class="text-lg text-gray-700">
+      Our intelligent platform automatically creates smooth transitions, adds professional voiceover narration, and includes eye-catching subtitles—all customized for real estate marketing. Perfect for MLS listings, social media posts, and virtual tours.
+    </p>
+    <p class="text-lg text-gray-700">
+      Stop spending hours on video editing. CasaVid's real estate video maker produces broadcast-quality content in minutes, not days.
+    </p>
+  </div>
+`,
+  'real-estate-video-production': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Revolutionize your <span class="font-semibold text-green-700">real estate video production</span> with CasaVid's AI-powered platform. Create professional property videos from photos without expensive equipment or production teams.
+    </p>
+    <p class="text-lg text-gray-700">
+      Traditional real estate video production costs thousands of dollars and takes days to complete. CasaVid delivers stunning results in seconds at a fraction of the cost, making professional video accessible to every agent.
+    </p>
+    <p class="text-lg text-gray-700">
+      Scale your video marketing effortlessly—produce videos for every listing without breaking the budget or sacrificing quality.
+    </p>
+  </div>
+`,
+  'real-estate-video-production-company': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Looking for a <span class="font-semibold text-green-700">real estate video production company</span> that delivers fast, affordable results? CasaVid combines the quality of professional production with the speed and cost-effectiveness of AI technology.
+    </p>
+    <p class="text-lg text-gray-700">
+      Unlike traditional video production companies that charge premium rates and require long lead times, CasaVid empowers real estate professionals to create their own stunning property videos instantly.
+    </p>
+    <p class="text-lg text-gray-700">
+      Get professional-grade walkthrough videos, virtual tours, and marketing content without the hassle of coordinating shoots or waiting for edits.
+    </p>
+  </div>
+`,
+  'real-estate-video-editor': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      CasaVid is the smartest <span class="font-semibold text-green-700">real estate video editor</span> on the market. Our AI automatically handles all the editing—transitions, timing, narration, and subtitles—so you don't have to.
+    </p>
+    <p class="text-lg text-gray-700">
+      No video editing experience? No problem. Simply upload your property photos, choose your preferences, and CasaVid produces a polished, professional video ready for marketing.
+    </p>
+    <p class="text-lg text-gray-700">
+      Spend less time editing and more time closing deals. Our real estate video editor is designed specifically for agents who want professional results without the learning curve.
+    </p>
+  </div>
+`,
+  'real-estate-video-services': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Discover premium <span class="font-semibold text-green-700">real estate video services</span> powered by AI. CasaVid offers a complete solution for creating property walkthrough videos, virtual tours, and social media content.
+    </p>
+    <p class="text-lg text-gray-700">
+      Our services include AI-generated narration, professional subtitles, smooth transitions, and optimized formats for every platform—from Instagram Reels to YouTube and MLS listings.
+    </p>
+    <p class="text-lg text-gray-700">
+      Elevate your real estate marketing with video services that deliver results. CasaVid helps you showcase properties in their best light and attract more qualified buyers.
+    </p>
+  </div>
+`,
+  'real-estate-video-tours': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Create stunning <span class="font-semibold text-green-700">real estate video tours</span> from your property photos with CasaVid. Our AI transforms static images into immersive walkthrough experiences that engage potential buyers.
+    </p>
+    <p class="text-lg text-gray-700">
+      Video tours are essential for modern real estate marketing—they generate more views, longer engagement, and faster sales. CasaVid makes it easy to produce professional video tours for every listing.
+    </p>
+    <p class="text-lg text-gray-700">
+      Give buyers the next best thing to an in-person visit with AI-powered video tours that highlight every room and feature of your properties.
+    </p>
+  </div>
+`,
+  'real-estate-drone-video-chicago': `
+  <div class="space-y-4">
+    <p class="text-lg text-gray-700">
+      Enhance your <span class="font-semibold text-green-700">real estate drone video in Chicago</span> by combining aerial footage with CasaVid's AI-powered interior walkthroughs. Create comprehensive property videos that showcase both stunning exteriors and detailed interiors.
+    </p>
+    <p class="text-lg text-gray-700">
+      Chicago's diverse neighborhoods—from Lincoln Park to the Gold Coast—deserve video marketing that captures their unique appeal. CasaVid helps Chicago realtors create professional property videos that stand out in a competitive market.
+    </p>
+    <p class="text-lg text-gray-700">
+      Complement your drone footage with polished interior videos. CasaVid transforms your property photos into seamless walkthrough content that buyers love.
+    </p>
+  </div>
+`,
   };
   
 
@@ -1080,7 +1210,7 @@ export default async function DynamicPage({ params }: PageProps) {
   
     const content = contentMap[slug] || `
       <div class="space-y-4">
-        <p class="text-lg text-gray-700">VidNarrate - Create Faceless Videos in Minutes!</p>
+        <p class="text-lg text-gray-700">CasaVid - Transform property photos into stunning walkthrough videos in seconds!</p>
       </div>
     `;
   
@@ -1090,41 +1220,42 @@ export default async function DynamicPage({ params }: PageProps) {
           <div className="flex flex-col lg:flex-row items-center gap-4 px-8 py-2 max-w-6xl w-full">
             <div className="flex flex-col space-y-4 lg:w-1/2 w-full">
               <h1 className="yeseva text-4xl text-gray-800 font-bold">
-                Generate <span className="text-blue-700"> Video Content ✨ </span> on various Topics with <span className="text-blue-700">A.I. 🚀</span>
+                Turn <span className="text-green-600">Property Photos</span> into <span className="text-green-600">Walkthrough Videos</span> in Seconds
               </h1>
               <div className="text-xl font-bold text-blue-700 mb-4">
-                <TypewriterTitle />
+                <CasavidTypewriter />
               </div>
               <div className="flex flex-col space-y-8">
-                {!session && <ActionButton buttonText="Sign Up - For Free" />}
+                {!session && <ActionButton buttonText="Create Your Video" />}
                 {session && (
                   <Link href="/dashboard">
                     <Button
-                      className="hover:scale-110 transition duration-300 ease-in-out w-full lg:w-1/2 rounded-full text-xl"
-                      style={{ backgroundColor: 'blue', color: 'white' }}
+                      className="hover:scale-105 transition duration-300 ease-in-out w-full lg:w-auto px-8 rounded-full text-lg py-6 bg-green-600 hover:bg-green-700 text-white"
                     >
-                      Generate
+                      Create Your Video
                     </Button>
                   </Link>
                 )}
                 <div className="text-sm text-gray-800 italic">
-                  <p>Start with quick easy steps!</p>
-                  <p>1. Choose Topic, Voice and Background Music </p>
-                  <p>2. Verify the generated script</p>
-                  <p>3. Download Video or Automatically post to Social Media ✨</p>
+                  <p>Create professional property videos in 3 easy steps:</p>
+                  <p>1. Upload 1-10 photos of any property</p>
+                  <p>2. Choose video length and style</p>
+                  <p>3. Get your video with AI narration &amp; subtitles!</p>
                 </div>
               </div>
             </div>
             <div className="ml-5 lg:w-1/2 w-full mt-2 lg:mt-0 items-center rounded">
-              <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/q2OQUSIQ5ls"
-                title="Vidnarrate Tutorial"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="rounded-lg"
-              ></iframe>
+              <video
+                className="w-full h-auto rounded-xl shadow-2xl"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              >
+                <source src="https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/housevid.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
 
@@ -1137,124 +1268,25 @@ export default async function DynamicPage({ params }: PageProps) {
             </div>
           </div>
 
-          <TestimonialsShorts />
+          <CasavidTestimonials />
           <div className="py-2">
-            {!session && <ActionButton buttonText="Sign Up - For Free" />}
+            {!session && <ActionButton buttonText="Create Your Video" />}
           </div>
 
-          <FeatureSection
-            badge="Topic Flexibility"
-            title="Create Videos on"
-            subtitle="Any Topic in Many Languages ✨"
-            description="Create videos on any topic you want in many languages. You can choose from a wide range of topics and genres to create your own unique video content."
-            features={[
-              "Choose from our long list of topics or specify your own",
-              "Select from our long list of languages",
-              "Choose from various Art Styles",
-              "Post directly to Social Media",
-            ]}
-            videos={[ 
-              { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Cars.mp4", title: "Cars" },             
-              { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/Travel%20Tips.mp4", title: "Travel Content" },
-              { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/Faceless%20Video%20Beauty%206.mp4", title: "Beauty Tips" },
-              { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Space.mp4", title: "Space" },
-              { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Apple.mp4", title: "Apple" },
-            ]}
-            accentColor="blue"
-            isLoggedIn={!!session}
-          />
-          <HowItWorks />
+          <CasavidFeatures />
+          <CasavidHowItWorks />
         
           <div className="pt-6">
-            {!session && <ActionButton buttonText="Sign Up - For Free" />}
+            {!session && <ActionButton buttonText="Create Your Video" />}
           </div>
           
-          <div className="w-full bg-gradient-to-b from-white to-blue-50 py-8">
-            <div className="text-center mb-8 px-4">
-              <h2 className="yeseva text-3xl lg:text-4xl font-bold text-gray-800">
-                Powerful Features for <span className="text-blue-700">Content Creators</span>
-              </h2>
-              <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-                Everything you need to create engaging videos that grow your audience
-              </p>
-            </div>
-
-            <div className="pt-4 px-4">
-              {!session && <ActionButton buttonText="Sign Up - For Free" />}
-            </div>
-            <FeatureSection
-              badge="Real Time Content"
-              title="Create Videos on"
-              subtitle="Current Breaking News 📰"
-              description="Is there a Breaking News on your favourite Sports Team, Celebrity, Politician or any other topic? Create a video on it."
-              features={[
-                "Create videos on current breaking news on any topic",
-                "Specify the news topic and generate the video",
-              ]}
-              videos={[
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Arsenal.mp4", title: "Arsenal" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Curry.mp4", title: "Curry" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Bitcoin.mp4", title: "Bitcoin" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Brady.mp4", title: "Brady" },
-              ]}
-              reverse={true}
-              accentColor="green"
-              isLoggedIn={!!session}
-            />
-            <div className="pt-4 px-4">
-              {!session && <ActionButton buttonText="Sign Up - For Free" />}
-            </div>
-            <FeatureSection
-              badge="Premium Quality"
-              title="Cinema Mode"
-              subtitle="& Animated Videos 🎬"
-              description="Create stunning cinematic videos with quality visuals. Add motion to your images for that extra wow factor that stops the scroll."
-              features={[
-                "Cinematic-quality AI image generation",
-                "Animate static images into moving videos",
-                "Perfect for storytelling and dramatic content",
-                "Regenerate any section",
-              ]}
-              videos={[
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Moses.mp4", title: "Moses" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Extended.mp4", title: "Extended Demo" },
-              ]}
-              accentColor="blue"
-              isLoggedIn={!!session}
-            />
-            <div className="pt-4 px-4">
-              {!session && <ActionButton buttonText="Sign Up - For Free" />}
-            </div>
-            <FeatureSection
-              badge="Go Long"
-              title="Create Long Videos"
-              subtitle="and specify exact Length and script 🚀"
-              description="Ready to create longer content? Generate extended videos with multiple scenes, perfect for YouTube, educational content, or in-depth storytelling that keeps your audience watching."
-              features={[
-                "Create videos longer than typical shorts",
-                "Multiple generated scenes per video",
-                "Full control over each segment",
-                "Perfect for tutorials and storytelling",
-              ]}
-              videos={[
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Solar%20Star.mp4", title: "Space" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Astro.mp4", title: "Astronaut" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/Extended.mp4", title: "Extended Demo" },
-                { url: "https://vidnarrate.sfo3.cdn.digitaloceanspaces.com/SAMPLES/AI%20script%20helper.mp4", title: "AI Script Helper" },
-              ]}
-              reverse={true}
-              accentColor="orange"
-              isLoggedIn={!!session}
-            />
-          </div>
-
           <div className="py-4">
             {!session && <ActionButton buttonText="Start Creating Videos" />}
           </div>
 
-          <FaqShorts />
+          <CasavidFaq />
           <div className="mt-4">
-            {!session && <ActionButton buttonText="Sign Up - For Free" />}
+            {!session && <ActionButton buttonText="Create Your Video" />}
           </div>
         </div>
       </ReferrerBlocker>

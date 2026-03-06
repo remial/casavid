@@ -77,7 +77,8 @@ export async function POST(
       });
     }
 
-    const webhookUrl = `${process.env.NEXTAUTH_URL}/api/property/webhook/video-ready`;
+    const baseUrl = (process.env.NEXTAUTH_URL || '').replace(/\/$/, '');
+    const webhookUrl = `${baseUrl}/api/property/webhook/video-ready`;
     log(`Webhook URL: ${webhookUrl}`);
     
     const ffmpegPayload = {

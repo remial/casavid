@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Property } from '@/app/dashboard/page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, GripVertical, Play, Sparkles, Save } from 'lucide-react';
+import { Loader2, GripVertical, Play, Sparkles, Save, CheckCircle } from 'lucide-react';
 
 interface PropertyEditorProps {
   property: Property;
@@ -19,6 +19,13 @@ interface PhotoItem {
   order: number;
   caption: string;
   duration: number;
+}
+
+interface PropertyStatus {
+  status: 'draft' | 'processing' | 'ready' | 'failed';
+  videoUrl: string | null;
+  thumbnailUrl: string | null;
+  errorMessage: string | null;
 }
 
 export default function PropertyEditor({ property, userId }: PropertyEditorProps) {
@@ -34,6 +41,43 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  
+  const [currentStatus, setCurrentStatus] = useState<PropertyStatus>({
+    status: property.status,
+    videoUrl: property.videoUrl || null,
+    thumbnailUrl: property.thumbnailUrl || null,
+    errorMessage: null,
+  });
+  const [pollingCount, setPollingCount] = useState(0);
+
+  const pollStatus = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/property/${property.id}/status`);
+      if (response.ok) {
+        const data: PropertyStatus = await response.json();
+        setCurrentStatus(data);
+        return data.status;
+      }
+    } catch (error) {
+      console.error('Failed to poll status:', error);
+    }
+    return currentStatus.status;
+  }, [property.id, currentStatus.status]);
+
+  useEffect(() => {
+    if (currentStatus.status !== 'processing') return;
+
+    const interval = setInterval(async () => {
+      setPollingCount(prev => prev + 1);
+      const newStatus = await pollStatus();
+      
+      if (newStatus !== 'processing') {
+        clearInterval(interval);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentStatus.status, pollStatus]);
 
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
@@ -112,7 +156,10 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
 
   const totalDuration = photos.reduce((sum, p) => sum + p.duration, 0);
 
-  if (property.status === 'processing') {
+  if (currentStatus.status === 'processing') {
+    const elapsedTime = pollingCount * 5;
+    const estimatedProgress = Math.min(95, Math.round((elapsedTime / 120) * 100));
+    
     return (
       <Card className="max-w-lg mx-auto">
         <CardContent className="p-8 text-center">
@@ -121,6 +168,17 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
           <p className="text-gray-600 mb-4">
             Your property video is being generated. This usually takes 2-5 minutes.
           </p>
+          
+          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div 
+              className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+              style={{ width: `${estimatedProgress}%` }}
+            />
+          </div>
+          <p className="text-xs text-gray-500 mb-4">
+            Checking status... ({Math.floor(elapsedTime / 60)}:{(elapsedTime % 60).toString().padStart(2, '0')} elapsed)
+          </p>
+          
           <p className="text-sm text-gray-500">
             You can leave this page. We'll email you when your video is ready.
           </p>
@@ -136,26 +194,26 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
     );
   }
 
-  if (property.status === 'ready' && property.videoUrl) {
+  if (currentStatus.status === 'ready' && currentStatus.videoUrl) {
     return (
       <Card className="max-w-2xl mx-auto">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            <div className="text-4xl mb-2">🎉</div>
+            <CheckCircle className="w-12 h-12 mx-auto text-green-500 mb-2" />
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Video Ready!</h2>
             <p className="text-gray-600">Your property walkthrough video is complete.</p>
           </div>
           
           <div className="aspect-video rounded-lg overflow-hidden bg-black mb-6">
             <video 
-              src={property.videoUrl} 
+              src={currentStatus.videoUrl} 
               controls 
               className="w-full h-full"
             />
           </div>
           
           <div className="flex justify-center gap-4">
-            <a href={property.videoUrl} download>
+            <a href={currentStatus.videoUrl} download>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 Download Video
               </Button>
@@ -164,6 +222,31 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
               Back to Dashboard
             </Button>
           </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (currentStatus.status === 'failed') {
+    return (
+      <Card className="max-w-lg mx-auto">
+        <CardContent className="p-8 text-center">
+          <div className="text-4xl mb-4">😔</div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Video Generation Failed</h2>
+          <p className="text-gray-600 mb-4">
+            {currentStatus.errorMessage || 'Something went wrong while generating your video.'}
+          </p>
+          <p className="text-sm text-gray-500 mb-4">
+            Your credit has been refunded. Please try again.
+          </p>
+          <Button 
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={() => {
+              setCurrentStatus(prev => ({ ...prev, status: 'draft' }));
+            }}
+          >
+            Try Again
+          </Button>
         </CardContent>
       </Card>
     );

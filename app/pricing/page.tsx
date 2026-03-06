@@ -90,9 +90,7 @@ const Page = () => {
           <p className='mt-4 text-lg text-gray-600'>
             Choose the plan that fits your needs
           </p>
-          <p className='mt-2 text-sm text-gray-500'>
-            All plans include AI narration &amp; subtitles
-          </p>
+         
         </div>
 
         <div className='pt-8 grid grid-cols-1 gap-8 lg:grid-cols-3'>

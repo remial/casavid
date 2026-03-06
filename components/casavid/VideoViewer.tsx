@@ -104,12 +104,12 @@ export default function VideoViewer({
               <Download className="w-4 h-4" />
               Download Video
             </Button>
-            
+            {/* Will Implement Edit & Regenerate later
             <Link href={`/dashboard/edit/${propertyId}`} className="flex-1 sm:flex-none">
               <Button variant="outline" className="w-full sm:w-auto">
                 Edit & Regenerate
               </Button>
-            </Link>
+            </Link>*/}
           </div>
         </div>
       </div>

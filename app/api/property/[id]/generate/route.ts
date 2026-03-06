@@ -84,7 +84,7 @@ export async function POST(
     };
 
     try {
-      const response = await fetch(`${ffmpegApiUrl}/generate-video`, {
+      const response = await fetch(`${ffmpegApiUrl}/generate-casavid-video`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,12 +94,17 @@ export async function POST(
       });
 
       if (!response.ok) {
-        throw new Error(`FFmpeg API returned ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`FFmpeg API returned ${response.status}: ${errorText}`);
       }
+
+      const result = await response.json();
 
       return NextResponse.json({
         message: 'Video generation started',
         propertyId,
+        jobId: result.jobId,
+        estimatedTime: result.estimatedTime,
       });
 
     } catch (ffmpegError) {

@@ -211,7 +211,27 @@ export async function POST(req: Request) {
       let priceId: string | null = null;
       if (eventType === 'checkout.session.completed') {
         const checkoutSession = session as Stripe.Checkout.Session;
-        priceId = checkoutSession.line_items?.data?.[0]?.price?.id || null;
+        // line_items is NOT included in the webhook payload by default
+        // We need to retrieve the session with line_items expanded
+        if (checkoutSession.id) {
+          try {
+            const expandedSession = await stripe.checkout.sessions.retrieve(checkoutSession.id, {
+              expand: ['line_items.data.price'],
+            });
+            priceId = expandedSession.line_items?.data?.[0]?.price?.id || null;
+          } catch (err) {
+            console.error('Error retrieving checkout session line_items:', err);
+          }
+        }
+        // Fallback: if we still don't have priceId, try to get it from the subscription
+        if (!priceId && checkoutSession.subscription) {
+          try {
+            const subscription = await stripe.subscriptions.retrieve(checkoutSession.subscription as string);
+            priceId = subscription.items.data?.[0]?.price?.id || null;
+          } catch (err) {
+            console.error('Error retrieving subscription for checkout session:', err);
+          }
+        }
       } else {
         const invoice = session as Stripe.Invoice;
         // For regular subscription renewals, get the price from the subscription
@@ -220,12 +240,29 @@ export async function POST(req: Request) {
           try {
             const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
             priceId = subscription.items.data?.[0]?.price?.id || null;
+            if (!priceId) {
+              console.warn(`Subscription ${invoice.subscription} has no price in items.data`);
+            }
           } catch (err) {
             console.error('Error retrieving subscription for invoice:', err);
+            // Fallback to invoice lines
             priceId = invoice.lines?.data?.[0]?.price?.id || null;
           }
         } else {
+          // No subscription attached, try to get from invoice lines
           priceId = invoice.lines?.data?.[0]?.price?.id || null;
+        }
+        
+        // If still no priceId, try expanding the invoice
+        if (!priceId && invoice.id) {
+          try {
+            const expandedInvoice = await stripe.invoices.retrieve(invoice.id, {
+              expand: ['lines.data.price'],
+            });
+            priceId = expandedInvoice.lines?.data?.[0]?.price?.id || null;
+          } catch (err) {
+            console.error('Error retrieving expanded invoice:', err);
+          }
         }
       }
 
@@ -848,8 +885,17 @@ Subscription Status: ${subscription.status}`;
                   
                   // Calculate next credit refresh date
                   const now = admin.firestore.Timestamp.now();
-                  const nextRefreshDate = new Date(subscription.current_period_end * 1000);
-                  const nextCreditRefresh = admin.firestore.Timestamp.fromDate(nextRefreshDate);
+                  let nextCreditRefresh: admin.firestore.Timestamp;
+                  if (subscription.current_period_end && typeof subscription.current_period_end === 'number') {
+                    const nextRefreshDate = new Date(subscription.current_period_end * 1000);
+                    nextCreditRefresh = admin.firestore.Timestamp.fromDate(nextRefreshDate);
+                  } else {
+                    // Fallback: set next refresh to 1 month from now
+                    const fallbackDate = new Date();
+                    fallbackDate.setMonth(fallbackDate.getMonth() + 1);
+                    nextCreditRefresh = admin.firestore.Timestamp.fromDate(fallbackDate);
+                    console.warn(`subscription.current_period_end was not a valid number, using fallback date`);
+                  }
                   
                   // Update user with new plan details
                   await userRef.update({

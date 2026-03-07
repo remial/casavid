@@ -6,6 +6,7 @@ import { adminDB } from "@/firebase-admin";
 import OpenAI from "openai";
 import {
   buildSystemPrompt,
+  SupportUserContext,
   UserCategory,
 } from "@/lib/chatbot-knowledge";
 
@@ -16,23 +17,23 @@ const openai = new OpenAI({
 function getUserCategory(
   isSignedIn: boolean,
   isSubscribed: boolean,
-  subLevel: number
 ): UserCategory {
   if (!isSignedIn) {
     return "not_signed_in";
   }
-  if (!isSubscribed || subLevel === 0) {
-    return "signed_in_not_subscribed";
-  }
+  return isSubscribed ? "signed_in_with_subscription" : "signed_in_no_subscription";
+}
+
+function getPlanName(subLevel: number): string | null {
   switch (subLevel) {
     case 1:
-      return "starter";
+      return "Starter";
     case 2:
-      return "daily";
+      return "Pro";
     case 3:
-      return "twice_daily";
+      return "Premium";
     default:
-      return "signed_in_not_subscribed";
+      return null;
   }
 }
 
@@ -66,13 +67,16 @@ export async function POST(req: NextRequest) {
     let isSignedIn = false;
     let isSubscribed = false;
     let subLevel = 0;
+    let credits: number | null = null;
+    let planName: string | null = null;
+    let signInMethod: string | null = null;
 
     if (userId) {
       isSignedIn = true;
       
       // Detect sign-in method based on userId length
       // Shorter IDs (21 chars) = Google sign-in, Longer IDs (28 chars) = Email/Password
-      const signInMethod = userId.length <= 22 ? "Google" : "Email/Password";
+      signInMethod = userId.length <= 22 ? "Google" : "Email/Password";
 
       // Fetch only needed user data from Firebase
       try {
@@ -82,14 +86,14 @@ export async function POST(req: NextRequest) {
           const userData = userDoc.data();
           isSubscribed = userData?.isSubscribed || false;
           subLevel = userData?.subLevel || 0;
-          
-          const planName = subLevel === 1 ? "Starter" : subLevel === 2 ? "Daily" : subLevel === 3 ? "Twice Daily" : "None";
+          credits = userData?.credits ?? 0;
+          planName = getPlanName(subLevel);
           
           console.log("[Contact Chat] User:", {
             name: session?.user?.name || "Unknown",
             email: userEmail,
-            plan: planName,
-            credits: userData?.credits || 0,
+            plan: planName || "None",
+            credits,
             signInMethod: signInMethod,
           });
         } else {
@@ -99,15 +103,26 @@ export async function POST(req: NextRequest) {
         console.error("[Contact Chat] Firebase error:", error);
         isSubscribed = session?.user?.isSubscribed || false;
         subLevel = session?.user?.subLevel || 0;
+        credits = session?.user?.credits ?? 0;
+        planName = getPlanName(subLevel);
       }
     } else {
       console.log("[Contact Chat] Anonymous user (not signed in)");
     }
 
-    const userCategory = getUserCategory(isSignedIn, isSubscribed, subLevel);
+    const userCategory = getUserCategory(isSignedIn, isSubscribed);
     console.log("[Contact Chat] User category:", userCategory);
-    
-    const systemPrompt = buildSystemPrompt(userCategory);
+
+    const userContext: SupportUserContext = {
+      category: userCategory,
+      name: session?.user?.name ?? null,
+      email: userEmail ?? null,
+      planName,
+      credits,
+      signInMethod,
+    };
+
+    const systemPrompt = buildSystemPrompt(userContext);
     console.log("[Contact Chat] System prompt length:", systemPrompt.length);
 
     // Build the messages array for OpenAI
@@ -134,7 +149,7 @@ export async function POST(req: NextRequest) {
         messages: openaiMessages,
         max_completion_tokens: 4096,
         stream: true,
-      });
+      } as any);
       console.log("[Contact Chat] OpenAI stream created successfully, type:", typeof stream);
     } catch (openaiError) {
       console.error("[Contact Chat] OpenAI API error:", openaiError);

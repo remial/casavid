@@ -21,24 +21,11 @@ interface ChatMessage {
 function getUserCategory(
   isSignedIn: boolean,
   isSubscribed: boolean,
-  subLevel: number
 ): UserCategory {
   if (!isSignedIn) {
     return "not_signed_in";
   }
-  if (!isSubscribed || subLevel === 0) {
-    return "signed_in_not_subscribed";
-  }
-  switch (subLevel) {
-    case 1:
-      return "starter";
-    case 2:
-      return "daily";
-    case 3:
-      return "twice_daily";
-    default:
-      return "signed_in_not_subscribed";
-  }
+  return isSubscribed ? "signed_in_with_subscription" : "signed_in_no_subscription";
 }
 
 export async function POST(req: Request) {
@@ -79,7 +66,7 @@ export async function POST(req: Request) {
       }
     }
 
-    const userCategory = getUserCategory(isSignedIn, isSubscribed, subLevel);
+    const userCategory = getUserCategory(isSignedIn, isSubscribed);
     const userCategoryLabel = getUserCategoryLabel(userCategory);
 
     // Format timestamps

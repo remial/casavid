@@ -60,8 +60,8 @@ const Page = () => {
         { text: 'Up to 10 photos per video' },
         { text: '60-second videos' },
         { text: 'AI narration + 4 voices' },
-        { text: 'Auto subtitles' },
-        { text: 'Priority processing' },
+        { text: 'Quick Processing' },
+        { text: 'Priority Support' },
       ],
     },
     {
@@ -73,8 +73,8 @@ const Page = () => {
         { text: 'Up to 20 photos per video' },
         { text: '2-minute videos' },
         { text: 'All voice styles' },
-        { text: 'Custom branding/logo' },
-        { text: 'Priority processing' },
+        { text: 'Auto subtitles'  },
+        { text: 'Priority support' },
        
       ],
     },
@@ -85,7 +85,7 @@ const Page = () => {
       <MaxWidthWrapper className='mb-8 mt-8 text-center max-w-7xl'>
         <div className='yeseva mx-auto mb-10 sm:max-w-lg'>
           <h1 className='text-3xl font-bold sm:text-4xl text-gray-800'>
-            Turn Every Listing Into a Video Tour 🏠
+            Upload photos. Get a video tour. Sell faster.
           </h1>
           <p className='mt-4 text-lg text-gray-600'>
             Choose the plan that fits your needs
@@ -137,7 +137,7 @@ const Page = () => {
                   </div>
 
                   <ul className='my-6 space-y-4 px-6'>
-                    {features.map(({ text, footnote, negative }) => (
+                    {features.map(({ text, negative }) => (
                       <li key={text} className='flex items-start space-x-3'>
                         <div className='flex-shrink-0 mt-0.5'>
                           {negative ? (
@@ -190,7 +190,7 @@ const Page = () => {
 
         {/* What's included section */}
         <div className='mt-16 max-w-4xl mx-auto'>
-          <h3 className='text-xl font-bold text-gray-800 mb-6'>What's we offer:</h3>
+          <h3 className='text-xl font-bold text-gray-800 mb-6'>What we offer:</h3>
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             {[
               { icon: '🎙️', text: 'Professional AI narration' },

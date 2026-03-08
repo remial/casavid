@@ -37,6 +37,7 @@ const DeleteButton = ({ seriesId }: Props) => {
         deleteSeries.mutate(undefined, {
           onSuccess: () => {
             router.push("/dashboard");
+            router.refresh();
           },
           onError: (err) => {
             console.error(err);

@@ -146,11 +146,13 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
         throw new Error(data.error || 'Failed to start generation');
       }
 
+      // Keep isGenerating true during navigation - component will unmount
+      // Force refresh to show latest data on dashboard
       router.push('/dashboard');
+      router.refresh();
     } catch (error: any) {
       console.error('Generate error:', error);
       alert(error.message || 'Failed to generate video');
-    } finally {
       setIsGenerating(false);
     }
   };
@@ -186,7 +188,10 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
           <Button 
             variant="outline" 
             className="mt-4"
-            onClick={() => router.push('/dashboard')}
+            onClick={() => {
+              router.push('/dashboard');
+              router.refresh();
+            }}
           >
             Back to Dashboard
           </Button>
@@ -219,7 +224,10 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                 Download Video
               </Button>
             </a>
-            <Button variant="outline" onClick={() => router.push('/dashboard')}>
+            <Button variant="outline" onClick={() => {
+              router.push('/dashboard');
+              router.refresh();
+            }}>
               Back to Dashboard
             </Button>
           </div>
@@ -270,17 +278,17 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
             Arrange photos in the order you want them to appear in the video. Add captions for each room.
           </p>
           
-          <div className="space-y-3">
+          <div className={`space-y-3 ${isGenerating ? 'opacity-60 pointer-events-none' : ''}`}>
             {photos.map((photo, index) => (
               <div
                 key={photo.url}
-                draggable
-                onDragStart={() => handleDragStart(index)}
-                onDragOver={(e) => handleDragOver(e, index)}
+                draggable={!isGenerating}
+                onDragStart={() => !isGenerating && handleDragStart(index)}
+                onDragOver={(e) => !isGenerating && handleDragOver(e, index)}
                 onDragEnd={handleDragEnd}
-                className={`p-3 sm:p-4 bg-white border rounded-lg cursor-move transition-all ${
-                  draggedIndex === index ? 'opacity-50 scale-95' : ''
-                }`}
+                className={`p-3 sm:p-4 bg-white border rounded-lg transition-all ${
+                  isGenerating ? 'cursor-not-allowed' : 'cursor-move'
+                } ${draggedIndex === index ? 'opacity-50 scale-95' : ''}`}
               >
                 {/* Desktop: horizontal layout */}
                 <div className="hidden sm:flex items-center gap-4">
@@ -301,6 +309,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                       onChange={(e) => updateCaption(index, e.target.value)}
                       placeholder="e.g., Spacious living room with natural light"
                       className="text-sm"
+                      disabled={isGenerating}
                     />
                   </div>
                   
@@ -313,6 +322,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                       value={photo.duration}
                       onChange={(e) => updateDuration(index, parseInt(e.target.value) || 5)}
                       className="text-sm text-center"
+                      disabled={isGenerating}
                     />
                   </div>
                   
@@ -344,6 +354,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                           value={photo.duration}
                           onChange={(e) => updateDuration(index, parseInt(e.target.value) || 5)}
                           className="text-sm text-center"
+                          disabled={isGenerating}
                         />
                       </div>
                       <span className="text-sm font-medium text-gray-400">
@@ -359,6 +370,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
                       onChange={(e) => updateCaption(index, e.target.value)}
                       placeholder="e.g., Spacious living room"
                       className="text-base h-11"
+                      disabled={isGenerating}
                     />
                   </div>
                 </div>

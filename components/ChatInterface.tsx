@@ -369,7 +369,7 @@ export default function ChatInterface() {
 
       {emailSent && (
         <div className="bg-green-50 text-green-700 text-sm px-4 py-2 text-center border-t border-green-200">
-          Chat log has been saved for our records.
+          Chat log refreshed
         </div>
       )}
 

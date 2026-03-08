@@ -123,6 +123,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
       
       if (creditData.credits <= 0) {
         alert('You need credits to create a video. Please purchase credits to continue.');
+        setIsSubmitting(false);
         router.push('/pricing');
         return;
       }
@@ -149,6 +150,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
       // Handle insufficient credits (backup check)
       if (response.status === 402) {
         alert(data.message || 'You need credits to create a video. Please purchase credits to continue.');
+        setIsSubmitting(false);
         if (data.redirectTo) {
           router.push(data.redirectTo);
         }
@@ -160,6 +162,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
         throw new Error(errorMsg);
       }
 
+      // Keep isSubmitting true during navigation - component will unmount
       router.push(`/dashboard/edit/${data.propertyId}`);
     } catch (error) {
       console.error('Error creating property:', error);
@@ -171,7 +174,6 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
       } else {
         alert(`Failed to create property: ${message}`);
       }
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -192,13 +194,17 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
           </p>
           
           <div
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              isSubmitting 
+                ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60' 
+                : isDragging 
+                  ? 'border-blue-500 bg-blue-50 cursor-pointer' 
+                  : 'border-gray-300 hover:border-blue-400 cursor-pointer'
             }`}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onClick={() => document.getElementById('photo-input')?.click()}
+            onDrop={!isSubmitting ? handleDrop : undefined}
+            onDragOver={!isSubmitting ? handleDragOver : undefined}
+            onDragLeave={!isSubmitting ? handleDragLeave : undefined}
+            onClick={() => !isSubmitting && document.getElementById('photo-input')?.click()}
           >
             <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
             <p className="text-gray-600 mb-2">Drop photos here or click to browse</p>
@@ -209,12 +215,13 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
               accept="image/*"
               multiple
               className="hidden"
+              disabled={isSubmitting}
               onChange={(e) => handleFileSelect(e.target.files)}
             />
           </div>
 
           {photos.length > 0 && (
-            <div className="mt-4">
+            <div className={`mt-4 ${isSubmitting ? 'opacity-60' : ''}`}>
               <p className="text-sm text-gray-600 mb-2">{photos.length}/10 photos uploaded</p>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {photos.map((photo, index) => (
@@ -224,15 +231,17 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
                       alt={`Photo ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removePhoto(index);
-                      }}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
+                    {!isSubmitting && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removePhoto(index);
+                        }}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
                     <div className="absolute bottom-1 left-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
                       {index + 1}
                     </div>
@@ -263,13 +272,17 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
               2. Video Length
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
             <p className="text-sm text-gray-500 mb-4">Longer videos showcase more details</p>
             <div className="space-y-3">
               {videoLengthOptions.map((option) => (
                 <label
                   key={option.value}
-                  className={`flex items-center p-3 rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-center p-3 rounded-lg border transition-colors ${
+                    isSubmitting 
+                      ? 'cursor-not-allowed' 
+                      : 'cursor-pointer'
+                  } ${
                     videoLength === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
                   }`}
                 >
@@ -280,6 +293,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
                     checked={videoLength === option.value}
                     onChange={() => setVideoLength(option.value)}
                     className="mr-3"
+                    disabled={isSubmitting}
                   />
                   <div>
                     <p className="font-medium text-gray-800">{option.label}</p>
@@ -298,12 +312,12 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
               3. Property Details
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className={`space-y-4 ${isSubmitting ? 'opacity-60 pointer-events-none' : ''}`}>
             <p className="text-sm text-gray-500">Help our AI write the perfect script</p>
             
             <div>
               <Label htmlFor="propertyType">Property Type</Label>
-              <Select value={propertyType} onValueChange={setPropertyType}>
+              <Select value={propertyType} onValueChange={setPropertyType} disabled={isSubmitting}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -320,7 +334,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="bedrooms">Bedrooms</Label>
-                <Select value={bedrooms} onValueChange={setBedrooms}>
+                <Select value={bedrooms} onValueChange={setBedrooms} disabled={isSubmitting}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -335,7 +349,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
               </div>
               <div>
                 <Label htmlFor="bathrooms">Bathrooms</Label>
-                <Select value={bathrooms} onValueChange={setBathrooms}>
+                <Select value={bathrooms} onValueChange={setBathrooms} disabled={isSubmitting}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -358,6 +372,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
                 onChange={(e) => setHighlights(e.target.value)}
                 placeholder="e.g., Renovated kitchen, hardwood floors, large backyard, mountain views, pool..."
                 rows={3}
+                disabled={isSubmitting}
               />
             </div>
           </CardContent>
@@ -372,13 +387,17 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
             4. Narrator Voice
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
           <p className="text-sm text-gray-500 mb-4">Choose the voice style for your video narration</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
             {voiceStyleOptions.map((option) => (
               <label
                 key={option.value}
-                className={`flex flex-col items-center text-center p-4 rounded-lg border cursor-pointer transition-colors ${
+                className={`flex flex-col items-center text-center p-4 rounded-lg border transition-colors ${
+                  isSubmitting 
+                    ? 'cursor-not-allowed' 
+                    : 'cursor-pointer'
+                } ${
                   voiceStyle === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
                 }`}
               >
@@ -389,6 +408,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
                   checked={voiceStyle === option.value}
                   onChange={() => setVoiceStyle(option.value)}
                   className="sr-only"
+                  disabled={isSubmitting}
                 />
                 <span className="text-2xl mb-2">{option.emoji}</span>
                 <p className="font-medium text-gray-800">{option.label}</p>

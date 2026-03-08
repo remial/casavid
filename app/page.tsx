@@ -34,11 +34,11 @@ export default async function Index() {
               </div>
 
               <div className="flex flex-col space-y-4">
-                {!session && <ActionButton buttonText="Create Your Video" />}
+                {!session && <ActionButton buttonText="Sign Up - For Free" />}
                 {session && (
                   <Link href="/dashboard">
                     <Button
-                      className="hover:scale-105 transition duration-300 ease-in-out w-full lg:w-auto px-8 rounded-full text-lg py-6 bg-green-600 hover:bg-green-700 text-white"
+                      className="hover:scale-105 transition duration-300 ease-in-out w-full lg:w-auto px-8 rounded-full text-lg py-6 bg-blue-600 hover:bg-blue-700 text-white"
                     >
                       Create Your Video
                     </Button>
@@ -74,7 +74,7 @@ export default async function Index() {
 
         {/* CTA */}
         <div className="py-4">
-          {!session && <ActionButton buttonText="Create Your Video" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free"  />}
         </div>
 
         {/* Testimonials */}
@@ -82,7 +82,7 @@ export default async function Index() {
 
         {/* CTA */}
         <div className="py-6">
-          {!session && <ActionButton buttonText="Get Started Free" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free"  />}
         </div>
 
         {/* Stats Section */}
@@ -90,7 +90,7 @@ export default async function Index() {
 
         {/* CTA */}
         <div className="py-6">
-          {!session && <ActionButton buttonText="Create Your Video" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free"  />}
         </div>
 
         {/* How It Works */}
@@ -98,7 +98,7 @@ export default async function Index() {
 
         {/* CTA */}
         <div className="py-6">
-          {!session && <ActionButton buttonText="Start Creating Videos" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free"  />}
         </div>
 
         {/* Features */}
@@ -106,7 +106,7 @@ export default async function Index() {
 
         {/* CTA */}
         <div className="py-6">
-          {!session && <ActionButton buttonText="Create Your Video" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free" />}
         </div>
 
         {/* FAQ */}
@@ -114,7 +114,7 @@ export default async function Index() {
 
         {/* Final CTA */}
         <div className="py-8">
-          {!session && <ActionButton buttonText="Get Started Free" />}
+          {!session && <ActionButton buttonText="Sign Up - For Free"  />}
         </div>
       </div>
     </ReferrerBlocker>

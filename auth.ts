@@ -64,6 +64,8 @@ declare module "next-auth/jwt" {
         id?: string;
         credits?: number;
         isUS?: boolean;
+        picture?: string | null;
+        email?: string | null;
     }
 }
 
@@ -152,6 +154,14 @@ export const authOptions: NextAuthOptions = {
         },
         session: async ({ session, token }) => {
             if (session?.user) {
+                // Set image and email from token (for Google OAuth)
+                if (token.picture) {
+                    session.user.image = token.picture;
+                }
+                if (token.email) {
+                    session.user.email = token.email;
+                }
+                
                 if (token.sub) {
                     session.user.id = token.sub;
 
@@ -258,13 +268,21 @@ export const authOptions: NextAuthOptions = {
             }
             return session;
         },
-        jwt: async ({ user, token }) => {
+        jwt: async ({ user, token, account, profile }) => {
             if (user) {
                 token.sub = user.id;
                 // Pass the isUS property from user to token if available
                 if (user.hasOwnProperty("isUS")) {
                     token.isUS = user.isUS;
                 }
+            }
+            // Store Google profile picture and email in the token
+            if (account?.provider === "google" && profile) {
+                token.picture = (profile as any).picture || user?.image;
+                token.email = profile.email || user?.email;
+            } else if (user) {
+                token.picture = user.image;
+                token.email = user.email;
             }
             return token;
         },

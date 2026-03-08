@@ -75,7 +75,12 @@ return session && (
             <UserAvatarWrapper name={session.user?.name || ''} image={session.user?.image} />
            </DropdownMenuTrigger>
            <DropdownMenuContent className="w-60 flex flex-col items-start bg-white">
-              <DropdownMenuLabel className="text-primary text-lg text-green-700 overflow-hidden text-ellipsis w-full">{session.user?.name || session.user?.email}</DropdownMenuLabel>
+              {session.user?.name && (
+                <DropdownMenuLabel className="text-primary text-lg text-gray-800 overflow-hidden text-ellipsis w-full">{session.user.name}</DropdownMenuLabel>
+              )}
+              {session.user?.email && (
+                <DropdownMenuLabel className="text-xl text-green-600 overflow-hidden text-ellipsis w-full py-0">{session.user.email}</DropdownMenuLabel>
+              )}
               <DropdownMenuSeparator className="w-full" />
               <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => signOut ({ callbackUrl: '/' })}> Log Out </DropdownMenuItem>
             </DropdownMenuContent>

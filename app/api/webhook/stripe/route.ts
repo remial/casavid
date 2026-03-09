@@ -2,14 +2,8 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
-import * as admin from 'firebase-admin';
-
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-  });
-}
+import admin from 'firebase-admin';
+import { adminDB } from '@/firebase-admin';
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -145,7 +139,7 @@ export async function POST(req: Request) {
           return NextResponse.json({ success: true }, { status: 200 });
         }
         
-        const userRef = admin.firestore().doc(`users/${userId}`);
+        const userRef = adminDB.doc(`users/${userId}`);
         const userDoc = await userRef.get();
         
         if (!userDoc.exists) {
@@ -198,14 +192,14 @@ export async function POST(req: Request) {
       }
 
       // Lookup user ID by Stripe customer ID
-      const customersRef = admin.firestore().collection('customers');
+      const customersRef = adminDB.collection('customers');
       const customerSnap = await customersRef.where('stripeId', '==', cusId).get();
       if (customerSnap.empty) {
         console.warn(`No user found for customer ID ${cusId}`);
         return NextResponse.json({ success: true }, { status: 200 });
       }
       const userId = customerSnap.docs[0].id;
-      const userRef = admin.firestore().doc(`users/${userId}`);
+      const userRef = adminDB.doc(`users/${userId}`);
 
       // Extract Price ID from the session/invoice
       let priceId: string | null = null;
@@ -297,23 +291,31 @@ export async function POST(req: Request) {
         let subscriptionId: string | null = null;
         if (eventType === 'checkout.session.completed') {
           const checkoutSession = session as Stripe.Checkout.Session;
-          subscriptionId = checkoutSession.subscription as string;
+          subscriptionId = (checkoutSession.subscription as string) || null;
         } else {
           const invoice = session as Stripe.Invoice;
-          subscriptionId = invoice.subscription as string;
+          subscriptionId = (invoice.subscription as string) || null;
         }
 
         console.log(`✅ Updating user ${userId} to ${planName}: Credits ${currentCredits} → ${updatedCredits}, SubLevel: ${subLevel}, Period: ${billingPeriod}`);
-        await userRef.update({
+        
+        // Build update object, only include subscriptionId if it exists (Firestore rejects undefined values)
+        const updateData: Record<string, any> = {
           credits: updatedCredits,
           isSubscribed: true,
           subLevel,
           billingPeriod,
           lastCreditRefresh: now,
           nextCreditRefresh,
-          stripeSubscriptionId: subscriptionId,
           stripePriceId: priceId,
-        });
+        };
+        
+        // Only set stripeSubscriptionId if we have a valid value
+        if (subscriptionId) {
+          updateData.stripeSubscriptionId = subscriptionId;
+        }
+        
+        await userRef.update(updateData);
       } else {
         console.warn(`⚠️ Unknown Price ID: ${priceId} - Please add this to priceIdToEntitlements map`);
       }
@@ -378,13 +380,13 @@ export async function POST(req: Request) {
       }
 
       // Restore archived plans if any exist
-      const archiveRef = admin.firestore()
+      const archiveRef = adminDB
         .collection('schedules')
         .doc(userId)
         .collection('plans_archive');
       const archiveSnap = await archiveRef.get();
       if (!archiveSnap.empty) {
-        const plansRef = admin.firestore()
+        const plansRef = adminDB
           .collection('schedules')
           .doc(userId)
           .collection('plans');
@@ -457,14 +459,14 @@ export async function POST(req: Request) {
       }
 
       // Lookup user ID by Stripe customer ID
-      const customersRef = admin.firestore().collection('customers');
+      const customersRef = adminDB.collection('customers');
       const customerSnap = await customersRef.where('stripeId', '==', cusId).get();
       if (customerSnap.empty) {
         console.warn(`No user found for customer ID ${cusId}`);
         return NextResponse.json({ success: true }, { status: 200 });
       }
       const userId = customerSnap.docs[0].id;
-      const userRef = admin.firestore().doc(`users/${userId}`);
+      const userRef = adminDB.doc(`users/${userId}`);
 
       // Skip modifications for exempted users
       if (exemptList.includes(userId)) {
@@ -481,13 +483,13 @@ export async function POST(req: Request) {
       console.log(`Reset allowances for user ${userId} after payment failure`);
 
       // Archive scheduled plans
-      const plansRef = admin.firestore()
+      const plansRef = adminDB
         .collection('schedules')
         .doc(userId)
         .collection('plans');
       const plansSnap = await plansRef.get();
       if (!plansSnap.empty) {
-        const archiveRef = admin.firestore()
+        const archiveRef = adminDB
           .collection('schedules')
           .doc(userId)
           .collection('plans_archive');
@@ -561,14 +563,14 @@ export async function POST(req: Request) {
       }
 
       // Lookup user ID by Stripe customer ID
-      const customersRef = admin.firestore().collection('customers');
+      const customersRef = adminDB.collection('customers');
       const customerSnap = await customersRef.where('stripeId', '==', cusId).get();
       if (customerSnap.empty) {
         console.warn(`No user found for customer ID ${cusId}`);
         return NextResponse.json({ success: true }, { status: 200 });
       }
       const userId = customerSnap.docs[0].id;
-      const userRef = admin.firestore().doc(`users/${userId}`);
+      const userRef = adminDB.doc(`users/${userId}`);
 
       // Skip modifications for exempted users
       if (exemptList.includes(userId)) {
@@ -602,13 +604,13 @@ export async function POST(req: Request) {
       console.log(`Reset allowances for user ${userId} after subscription cancellation`);
 
       // Archive scheduled plans
-      const plansRef = admin.firestore()
+      const plansRef = adminDB
         .collection('schedules')
         .doc(userId)
         .collection('plans');
       const plansSnap = await plansRef.get();
       if (!plansSnap.empty) {
-        const archiveRef = admin.firestore()
+        const archiveRef = adminDB
           .collection('schedules')
           .doc(userId)
           .collection('plans_archive');
@@ -763,7 +765,7 @@ Subscription Status: ${subscription.status}`;
             const today = new Date();
             const dateFolder = today.toISOString().split('T')[0]; // YYYY-MM-DD
             
-            const cancellationLogRef = admin.firestore()
+            const cancellationLogRef = adminDB
               .collection('cancellation_logs')
               .doc(dateFolder)
               .collection('cancellations')
@@ -816,12 +818,12 @@ Subscription Status: ${subscription.status}`;
               const { credits: newPlanCredits, maxCredits, subLevel, billingPeriod, planName } = newEntitlements;
               
               // Lookup user ID by Stripe customer ID
-              const customersRef = admin.firestore().collection('customers');
+              const customersRef = adminDB.collection('customers');
               const customerSnap = await customersRef.where('stripeId', '==', customerId).get();
               
               if (!customerSnap.empty) {
                 const userId = customerSnap.docs[0].id;
-                const userRef = admin.firestore().doc(`users/${userId}`);
+                const userRef = adminDB.doc(`users/${userId}`);
                 
                 // Get current user data
                 const userDoc = await userRef.get();

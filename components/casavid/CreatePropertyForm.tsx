@@ -11,6 +11,7 @@ import { Loader2, Upload, X, Image as ImageIcon } from 'lucide-react';
 
 interface CreatePropertyFormProps {
   userId: string;
+  subLevel: number;
 }
 
 interface UploadedPhoto {
@@ -54,7 +55,7 @@ const voiceStyleOptions = [
   { value: 'casual', label: 'Casual & Friendly', desc: 'Relaxed, conversational', emoji: '😊' },
 ];
 
-export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) {
+export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
@@ -62,9 +63,35 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
   const [bedrooms, setBedrooms] = useState('3');
   const [bathrooms, setBathrooms] = useState('2');
   const [highlights, setHighlights] = useState('');
-  const [videoLength, setVideoLength] = useState(60);
-  const [voiceStyle, setVoiceStyle] = useState('professional-male');
   const [isDragging, setIsDragging] = useState(false);
+
+  // Subscription-based restrictions
+  // subLevel 0 = unsubscribed (all options enabled, will be redirected on submit)
+  // subLevel 1 = Starter (5 photos, 30s video, first voice only)
+  // subLevel 2 = Pro (10 photos, up to 60s video, all voices)
+  // subLevel 3 = Premium (10 photos for now, all video lengths, all voices)
+  const isUnsubscribed = subLevel === 0;
+  const maxPhotos = isUnsubscribed ? 10 : subLevel === 1 ? 5 : 10;
+  
+  // Determine allowed video lengths
+  const getAllowedVideoLengths = () => {
+    if (isUnsubscribed) return [30, 60, 120]; // All options for unsubscribed
+    if (subLevel === 1) return [30]; // Starter: only 30s
+    if (subLevel === 2) return [30, 60]; // Pro: up to 60s
+    return [30, 60, 120]; // Premium: all lengths
+  };
+  const allowedVideoLengths = getAllowedVideoLengths();
+  
+  // Set default video length based on subscription
+  const getDefaultVideoLength = () => {
+    if (isUnsubscribed) return 60;
+    if (subLevel === 1) return 30;
+    if (subLevel === 2) return 60;
+    return 60;
+  };
+  
+  const [videoLength, setVideoLength] = useState(getDefaultVideoLength());
+  const [voiceStyle, setVoiceStyle] = useState('professional-male');
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
@@ -72,7 +99,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
     const newPhotos: UploadedPhoto[] = [];
     const currentCount = photos.length;
     
-    Array.from(files).slice(0, 10 - currentCount).forEach((file, index) => {
+    Array.from(files).slice(0, maxPhotos - currentCount).forEach((file, index) => {
       if (file.type.startsWith('image/')) {
         newPhotos.push({
           file,
@@ -82,8 +109,8 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
       }
     });
     
-    setPhotos(prev => [...prev, ...newPhotos].slice(0, 10));
-  }, [photos.length]);
+    setPhotos(prev => [...prev, ...newPhotos].slice(0, maxPhotos));
+  }, [photos.length, maxPhotos]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -185,8 +212,11 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-xl">📸</span>
-            1. Upload Property Photos (1-10)
+            1. Upload Property Photos (1-{maxPhotos})
           </CardTitle>
+          {subLevel === 1 && (
+            <p className="text-sm text-amber-600 mt-1">Starter Plan: Up to {maxPhotos} photos per video</p>
+          )}
         </CardHeader>
         <CardContent>
           <p className="text-sm text-gray-500 mb-4">
@@ -222,7 +252,7 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
 
           {photos.length > 0 && (
             <div className={`mt-4 ${isSubmitting ? 'opacity-60' : ''}`}>
-              <p className="text-sm text-gray-600 mb-2">{photos.length}/10 photos uploaded</p>
+              <p className="text-sm text-gray-600 mb-2">{photos.length}/{maxPhotos} photos uploaded</p>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {photos.map((photo, index) => (
                   <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
@@ -271,36 +301,56 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
               <span className="text-xl">🎬</span>
               2. Video Length
             </CardTitle>
+            {subLevel === 1 && (
+              <p className="text-sm text-amber-600 mt-1">Starter Plan: 30-second videos only</p>
+            )}
+            {subLevel === 2 && (
+              <p className="text-sm text-blue-600 mt-1">Pro Plan: Up to 60-second videos</p>
+            )}
           </CardHeader>
           <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
             <p className="text-sm text-gray-500 mb-4">Longer videos showcase more details</p>
             <div className="space-y-3">
-              {videoLengthOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center p-3 rounded-lg border transition-colors ${
-                    isSubmitting 
-                      ? 'cursor-not-allowed' 
-                      : 'cursor-pointer'
-                  } ${
-                    videoLength === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="videoLength"
-                    value={option.value}
-                    checked={videoLength === option.value}
-                    onChange={() => setVideoLength(option.value)}
-                    className="mr-3"
-                    disabled={isSubmitting}
-                  />
-                  <div>
-                    <p className="font-medium text-gray-800">{option.label}</p>
-                    <p className="text-sm text-gray-500">{option.desc}</p>
-                  </div>
-                </label>
-              ))}
+              {videoLengthOptions.map((option) => {
+                const isAllowed = allowedVideoLengths.includes(option.value);
+                const isDisabled = !isAllowed && !isUnsubscribed;
+                
+                return (
+                  <label
+                    key={option.value}
+                    className={`flex items-center p-3 rounded-lg border transition-colors ${
+                      isSubmitting || isDisabled
+                        ? 'cursor-not-allowed' 
+                        : 'cursor-pointer'
+                    } ${
+                      isDisabled 
+                        ? 'border-gray-200 bg-gray-50 opacity-60'
+                        : videoLength === option.value 
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-gray-200 hover:border-blue-300'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="videoLength"
+                      value={option.value}
+                      checked={videoLength === option.value}
+                      onChange={() => !isDisabled && setVideoLength(option.value)}
+                      className="mr-3"
+                      disabled={isSubmitting || isDisabled}
+                    />
+                    <div className="flex-1">
+                      <p className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-gray-800'}`}>{option.label}</p>
+                      <p className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-500'}`}>{option.desc}</p>
+                    </div>
+                    {isDisabled && (
+                      <span className="text-xs text-amber-600 font-medium whitespace-nowrap">
+                        {subLevel === 1 ? 'Not available on Starter Plan' : 'Not available on Pro Plan'}
+                      </span>
+                    )}
+                  </label>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
@@ -386,35 +436,53 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
             <span className="text-xl">🎙️</span>
             4. Narrator Voice
           </CardTitle>
+          {subLevel === 1 && (
+            <p className="text-sm text-amber-600 mt-1">Starter Plan: Default voice only</p>
+          )}
         </CardHeader>
         <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
           <p className="text-sm text-gray-500 mb-4">Choose the voice style for your video narration</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {voiceStyleOptions.map((option) => (
-              <label
-                key={option.value}
-                className={`flex flex-col items-center text-center p-4 rounded-lg border transition-colors ${
-                  isSubmitting 
-                    ? 'cursor-not-allowed' 
-                    : 'cursor-pointer'
-                } ${
-                  voiceStyle === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="voiceStyle"
-                  value={option.value}
-                  checked={voiceStyle === option.value}
-                  onChange={() => setVoiceStyle(option.value)}
-                  className="sr-only"
-                  disabled={isSubmitting}
-                />
-                <span className="text-2xl mb-2">{option.emoji}</span>
-                <p className="font-medium text-gray-800">{option.label}</p>
-                <p className="text-sm text-gray-500">{option.desc}</p>
-              </label>
-            ))}
+            {voiceStyleOptions.map((option, index) => {
+              // Starter plan users can only use the first voice option
+              const isVoiceRestricted = subLevel === 1 && index > 0;
+              const isDisabled = isVoiceRestricted && !isUnsubscribed;
+              
+              return (
+                <label
+                  key={option.value}
+                  className={`flex flex-col items-center text-center p-4 rounded-lg border transition-colors relative ${
+                    isSubmitting || isDisabled
+                      ? 'cursor-not-allowed' 
+                      : 'cursor-pointer'
+                  } ${
+                    isDisabled
+                      ? 'border-gray-200 bg-gray-50 opacity-60'
+                      : voiceStyle === option.value 
+                        ? 'border-blue-500 bg-blue-50' 
+                        : 'border-gray-200 hover:border-blue-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="voiceStyle"
+                    value={option.value}
+                    checked={voiceStyle === option.value}
+                    onChange={() => !isDisabled && setVoiceStyle(option.value)}
+                    className="sr-only"
+                    disabled={isSubmitting || isDisabled}
+                  />
+                  <span className={`text-2xl mb-2 ${isDisabled ? 'grayscale' : ''}`}>{option.emoji}</span>
+                  <p className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-gray-800'}`}>{option.label}</p>
+                  <p className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-500'}`}>{option.desc}</p>
+                  {isDisabled && (
+                    <span className="text-xs text-amber-600 font-medium mt-2">
+                      Not available on Starter Plan
+                    </span>
+                  )}
+                </label>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
@@ -439,9 +507,15 @@ export default function CreatePropertyForm({ userId }: CreatePropertyFormProps) 
           )}
         </Button>
       </div>
-      <p className="text-center text-sm text-gray-500">
-        You'll be able to reorder photos and add captions in the next step
-      </p>
+      {photos.length === 0 ? (
+        <p className="text-center text-sm text-amber-600 font-medium">
+          Please upload at least one photo to continue
+        </p>
+      ) : (
+        <p className="text-center text-sm text-gray-500">
+          You'll be able to reorder photos and add captions in the next step
+        </p>
+      )}
     </div>
   );
 }

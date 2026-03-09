@@ -38,7 +38,7 @@ const Page = () => {
         { text: 'Up to 5 photos per video' },
         { text: '30-second videos' },
         { 
-          text: 'AI narration',
+          text: 'Multiple AI voice styles',
           negative: true 
         },
         { 
@@ -47,6 +47,10 @@ const Page = () => {
         },
         { 
           text: '60-second videos',
+          negative: true 
+        },
+        { 
+          text: '2-minute Tour Videos',
           negative: true 
         },
       ],
@@ -59,9 +63,13 @@ const Page = () => {
         { text: '20 videos per month' },
         { text: 'Up to 10 photos per video' },
         { text: '60-second videos' },
-        { text: 'AI narration + 4 voices' },
+        { text: 'Multiple AI voice styles' },
         { text: 'Quick Processing' },
         { text: 'Priority Support' },
+        { 
+          text: '2-minute Tour Videos',
+          negative: true 
+        },
       ],
     },
     {
@@ -73,8 +81,9 @@ const Page = () => {
         { text: 'Up to 20 photos per video' },
         { text: '2-minute videos' },
         { text: 'All voice styles' },
-        { text: 'Auto subtitles'  },
+        { text: 'Quickest Processing'  },
         { text: 'Priority support' },
+        { text: '2-minute Tour Videos' },
        
       ],
     },

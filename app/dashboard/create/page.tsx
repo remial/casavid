@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic';
 export default async function CreatePropertyPage() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
+  const subLevel = session?.user?.subLevel ?? 0;
   
   if (!userId) {
     redirect('/');
@@ -29,7 +30,7 @@ export default async function CreatePropertyPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Create Property Video</h1>
         </div>
 
-        <CreatePropertyForm userId={userId} />
+        <CreatePropertyForm userId={userId} subLevel={subLevel} />
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ export async function POST(
       },
     };
 
-    log(`Sending request to DO server: ${ffmpegApiUrl}/generate-casavid-video`);
+    log(`Sending request to video processing server...`);
     log(`Payload: ${ffmpegPayload.photos.length} photos, ${ffmpegPayload.settings.videoLength}s, ${ffmpegPayload.settings.voiceStyle}`);
     
     try {
@@ -113,11 +113,11 @@ export async function POST(
       });
 
       const fetchTime = Date.now() - fetchStart;
-      log(`DO server responded in ${fetchTime}ms with status ${response.status}`);
+      log(`Video server responded in ${fetchTime}ms with status ${response.status}`);
 
       if (!response.ok) {
         const errorText = await response.text();
-        log(`ERROR: DO server returned ${response.status}: ${errorText}`);
+        log(`ERROR: Video server returned ${response.status}: ${errorText}`);
         throw new Error(`FFmpeg API returned ${response.status}: ${errorText}`);
       }
 

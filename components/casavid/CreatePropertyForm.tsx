@@ -2,12 +2,16 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import imageCompression from 'browser-image-compression';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Upload, X, Image as ImageIcon } from 'lucide-react';
+
+const MAX_TOTAL_SIZE_MB = 4;
+const MAX_TOTAL_SIZE_BYTES = MAX_TOTAL_SIZE_MB * 1024 * 1024;
 
 interface CreatePropertyFormProps {
   userId: string;
@@ -155,6 +159,29 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
         return;
       }
 
+      // Check total file size and compress if needed
+      const totalSize = photos.reduce((sum, p) => sum + p.file.size, 0);
+      let filesToUpload = photos.map(p => p.file);
+
+      if (totalSize > MAX_TOTAL_SIZE_BYTES) {
+        const targetSizePerFile = MAX_TOTAL_SIZE_MB / photos.length;
+        const compressionOptions = {
+          maxSizeMB: Math.max(0.3, targetSizePerFile),
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType: 'image/jpeg' as const,
+        };
+
+        filesToUpload = await Promise.all(
+          photos.map(async (photo) => {
+            if (photo.file.size > compressionOptions.maxSizeMB * 1024 * 1024) {
+              return await imageCompression(photo.file, compressionOptions);
+            }
+            return photo.file;
+          })
+        );
+      }
+
       const formData = new FormData();
       formData.append('propertyType', propertyType);
       formData.append('bedrooms', bedrooms);
@@ -163,8 +190,8 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
       formData.append('videoLength', videoLength.toString());
       formData.append('voiceStyle', voiceStyle);
       
-      photos.forEach((photo, index) => {
-        formData.append(`photo_${index}`, photo.file);
+      filesToUpload.forEach((file, index) => {
+        formData.append(`photo_${index}`, file);
       });
 
       const response = await fetch('/api/property/create', {
@@ -172,7 +199,16 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
         body: formData,
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        const text = await response.text();
+        if (text.toLowerCase().includes('too large') || text.toLowerCase().includes('entity')) {
+          throw new Error('Photos are too large. Please try with smaller or fewer photos.');
+        }
+        throw new Error(`Server error: ${text.slice(0, 100)}`);
+      }
 
       // Handle insufficient credits (backup check)
       if (response.status === 402) {

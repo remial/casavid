@@ -47,6 +47,7 @@
     "appwrite": "^14.0.0",
     "astro": "^4.4.15",
     "axios": "^1.6.4",
+    "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.0",
     "docx": "^6.0.3",
     "dotenv": "^16.4.5",

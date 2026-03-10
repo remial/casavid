@@ -35,7 +35,7 @@ const Page = () => {
       quota: 5,
       features: [
         { text: '5 videos per month' },
-        { text: '3 photos per video' },
+        { text: 'Only 3 photos per video' },
         { text: '30-seconds video length' },
         { 
           text: 'Multiple AI voice styles',

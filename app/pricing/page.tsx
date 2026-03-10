@@ -35,8 +35,8 @@ const Page = () => {
       quota: 5,
       features: [
         { text: '5 videos per month' },
-        { text: 'Only 3 photos per video' },
-        { text: ' Up to 30-seconds video length' },
+        { text: '3 photos per video' },
+        { text: '30-seconds video length' },
         { 
           text: 'Multiple AI voice styles',
           negative: true 
@@ -119,13 +119,19 @@ const Page = () => {
                   className={cn(
                     'relative rounded-xl bg-white shadow-lg',
                     {
-                      'border-2 border-blue-500 shadow-blue-100': plan === 'Pro',
-                      'border border-gray-200': plan !== 'Pro',
+                      'border-2 border-green-400 shadow-yellow-200': plan === 'Pro',
+                      'border-2 border-purple-300 shadow-yellow-200': plan === 'Premium',
+                      'border border-gray-200': plan !== 'Pro' && plan !== 'Premium',
                     }
                   )}>
                   {plan === 'Pro' && (
-                    <div className='absolute -top-4 left-0 right-0 mx-auto w-32 rounded-full bg-blue-500 px-3 py-1.5 text-sm font-medium text-white'>
+                    <div className='absolute -top-4 left-0 right-0 mx-auto w-32 rounded-full bg-green-400 shadow-yellow-200 px-3 py-1.5 text-sm font-medium text-gray-800'>
                       Most Popular!
+                    </div>
+                  )}
+                  {plan === 'Premium' && (
+                    <div className='absolute -top-4 left-0 right-0 mx-auto w-32 rounded-full bg-purple-300 shadow-yellow-200 px-3 py-1.5 text-sm font-medium text-gray-800'>
+                      Best Value!
                     </div>
                   )}
 

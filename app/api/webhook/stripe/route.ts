@@ -517,7 +517,11 @@ export async function POST(req: Request) {
           userEmail = stripeCustomer.email ?? null;
         }
 
-        if (userEmail) {
+        // Skip pause email for first-time payments - customer may still be correcting card details
+        // Only send for renewals (subscription_cycle) where the payment is automatic
+        if (invoice.billing_reason === 'subscription_create') {
+          console.log(`Skipping pause email for first-time payment (billing_reason: subscription_create) - customer ${cusId}`);
+        } else if (userEmail) {
           try {
             console.log(`Sending pause email to ${userEmail} via ${PAUSE_EMAIL_URL}`);
             await fetch(PAUSE_EMAIL_URL, {

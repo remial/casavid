@@ -57,6 +57,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   useEffect(() => {
     if (currentStatus.status !== 'processing') return;
 
+    // Poll immediately on mount to get fresh status (handles stale cache on navigation)
+    pollStatus();
+
     const interval = setInterval(async () => {
       const newStatus = await pollStatus();
       if (newStatus !== 'processing') {

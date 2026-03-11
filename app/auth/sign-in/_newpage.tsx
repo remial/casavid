@@ -56,7 +56,7 @@ const SignIn: React.FC = () => {
     if (providerId === 'google') {
       // Assume a Google sign-in attempt should trigger the conversion tracking
       setTagEvent (true);
-      track('Google Sign In');
+      track('Sign In');
     }
   };
 
@@ -78,7 +78,7 @@ const SignIn: React.FC = () => {
         {providers.google && (
           <button
           onClick={() => {
-            track('Google Sign In'); 
+            track('Sign In'); 
             handleOAuthSignIn('google'); 
           }}
           className="flex items-center gsi-material-button rounded-lg"

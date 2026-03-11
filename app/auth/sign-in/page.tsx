@@ -97,7 +97,7 @@ const SignIn: React.FC = () => {
         {providers?.google && (
           <button
           onClick={() => {
-            track('Google Sign In'); 
+            track('Sign In'); 
             handleOAuthSignIn('google'); 
           }}
           className="flex items-center gsi-material-button rounded-lg"

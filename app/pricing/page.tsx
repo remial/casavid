@@ -19,7 +19,8 @@ import {
 import Link from 'next/link'
 import { useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { track } from '@vercel/analytics';
 
 type BillingPeriod = 'monthly' | 'yearly';
 
@@ -27,6 +28,10 @@ const Page = () => {
   const { data: session } = useSession();
   const user = session?.user;
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>('monthly');
+
+  useEffect(() => {
+    track('Pricing');
+  }, []);
 
   const pricingItems = [
     {

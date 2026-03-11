@@ -5,6 +5,7 @@ import MetaPix from "@/components/MetaPix";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
+import { track } from '@vercel/analytics';
 
 declare global {
   interface Window {
@@ -111,6 +112,9 @@ const Success: React.FC = () => {
     
     fetchPurchaseAmount();
     setShouldTrackMeta(true);
+
+    // Track Vercel Analytics Purchase event
+    track('Purchase');
 
     // Track Google Ads Purchase conversion
     // TODO: Replace 'PURCHASE_LABEL' with your actual conversion label from Google Ads

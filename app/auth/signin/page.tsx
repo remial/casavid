@@ -40,6 +40,7 @@ const SignIn: React.FC = () => {
 
   const handleCredentialsSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
+    track('Sign In');
     const result = await signIn('credentials', {
       redirect: false,
       email: credentials.email,
@@ -77,7 +78,7 @@ const SignIn: React.FC = () => {
         {providers.google && (
           <button
           onClick={() => {
-            track('Google Sign In'); 
+            track('Sign In'); 
             handleOAuthSignIn('google'); 
           }}
           className="flex items-center gsi-material-button rounded-lg"

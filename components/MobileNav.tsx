@@ -38,7 +38,9 @@ const MobileNav: React.FC<SessionProps> = ({ session }) => {
           </Link>
           <Separator className="border border-gray-200" />
           
+          
           <div className="flex flex-col gap-2">
+            {/*
             {!session && (
               <>
                 <Link
@@ -71,7 +73,7 @@ const MobileNav: React.FC<SessionProps> = ({ session }) => {
                   </Button>
                 </Link>
               </>
-            )}
+            )}*/}
 
             {session && (
               <>

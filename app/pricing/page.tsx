@@ -40,8 +40,8 @@ const Page = () => {
       quota: 5,
       features: [
         { text: '5 videos per month' },
-        { text: 'Only 3 photos per video' },
-        { text: '30-seconds video length' },
+        { text: 'Up to 5 photos per video' },
+        { text: '30-seconds videos' },
         { 
           text: 'Multiple AI voice styles',
           negative: true 
@@ -67,7 +67,7 @@ const Page = () => {
       features: [
         { text: '20 videos per month' },
         { text: 'Up to 10 photos per video' },
-        { text: 'Up to 60-seconds video length' },
+        { text: '60-second videos' },
         { text: 'Multiple AI voice styles' },
         { text: 'Quick Processing' },
         { text: 'Priority Support' },
@@ -84,7 +84,7 @@ const Page = () => {
       features: [
         { text: '50 videos per month' },
         { text: 'Up to 20 photos per video' },
-        { text: 'Up to 2-minutes video length' },
+        { text: '2-minute videos' },
         { text: 'All voice styles' },
         { text: 'Quickest Processing'  },
         { text: 'Priority support' },

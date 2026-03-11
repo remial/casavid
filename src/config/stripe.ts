@@ -68,7 +68,7 @@ export const PLANS = [
     quota: 50,
     price: {
       monthly: {
-        amount: 99,
+        amount: 79,
         priceIds: {
           test: '',
           production: 'price_1T7spOLHSgRRnn5DgQbnFpIk',

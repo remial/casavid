@@ -54,13 +54,17 @@ const SubscriptionClient = () => {
         </div>
       </div>
 
-      {/* Generate Longer Videos Link */}
-      <div className="text-left mb-4">
+     
+
+      {/* Billing Portal Link */}
+      <div className="mb-6">
         <a
-          href="/faqlonger"
-          className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-2 rounded inline-block"
+          href="https://billing.stripe.com/p/login/4gMeVe9aP0rTaw4eVbbMQ00"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors"
         >
-          I want to create Longer Videos
+          Manage Subscription
         </a>
       </div>
 

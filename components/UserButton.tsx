@@ -82,6 +82,13 @@ return session && (
                 <DropdownMenuLabel className="text-xl text-green-600 overflow-hidden text-ellipsis w-full py-0">{session.user.email}</DropdownMenuLabel>
               )}
               <DropdownMenuSeparator className="w-full" />
+              {session.user?.isSubscribed && (
+                <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" asChild>
+                  <a href="https://billing.stripe.com/p/login/4gMeVe9aP0rTaw4eVbbMQ00" target="_blank" rel="noopener noreferrer">
+                    Billing
+                  </a>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem className="font-bold cursor-pointer text-gray-700" onClick={() => signOut ({ callbackUrl: '/' })}> Log Out </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

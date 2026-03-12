@@ -251,7 +251,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
             1. Upload Property Photos (1-{maxPhotos})
           </CardTitle>
           {subLevel === 1 && (
-            <p className="text-sm text-amber-600 mt-1">Starter Plan: Up to {maxPhotos} photos per video</p>
+            <p className="text-sm text-blue-600 mt-1">Starter Plan: Up to {maxPhotos} photos per video</p>
           )}
         </CardHeader>
         <CardContent>
@@ -338,7 +338,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
               2. Video Length
             </CardTitle>
             {subLevel === 1 && (
-              <p className="text-sm text-amber-600 mt-1">Starter Plan: 30-second videos only</p>
+              <p className="text-sm text-blue-600 mt-1">Starter Plan: 30-second videos only</p>
             )}
             {subLevel === 2 && (
               <p className="text-sm text-blue-600 mt-1">Pro Plan: Up to 60-second videos</p>
@@ -380,7 +380,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
                       <p className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-500'}`}>{option.desc}</p>
                     </div>
                     {isDisabled && (
-                      <span className="text-xs text-amber-600 font-medium whitespace-nowrap">
+                      <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
                         {subLevel === 1 ? 'Not available on Starter Plan' : 'Not available on Pro Plan'}
                       </span>
                     )}
@@ -473,7 +473,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
             4. Narrator Voice
           </CardTitle>
           {subLevel === 1 && (
-            <p className="text-sm text-amber-600 mt-1">Starter Plan: Default voice only</p>
+            <p className="text-sm text-blue-600 mt-1">Starter Plan: Default voice only</p>
           )}
         </CardHeader>
         <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
@@ -512,7 +512,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
                   <p className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-gray-800'}`}>{option.label}</p>
                   <p className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-500'}`}>{option.desc}</p>
                   {isDisabled && (
-                    <span className="text-xs text-amber-600 font-medium mt-2">
+                    <span className="text-xs text-blue-600 font-medium mt-2">
                       Not available on Starter Plan
                     </span>
                   )}

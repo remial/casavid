@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     // Create a Stripe billing portal session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      return_url: `${process.env.NEXTAUTH_URL || 'https://www.casavid.com'}/settings`,
+      return_url: `${process.env.NEXTAUTH_URL || 'https://www.casavid.com'}/dashboard`,
     });
 
     if (!portalSession.url) {

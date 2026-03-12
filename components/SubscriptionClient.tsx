@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 
@@ -56,24 +57,22 @@ const SubscriptionClient = () => {
 
      
 
-      {/* Billing Portal Link */}
+      {/* Back to Dashboard Button */}
       <div className="mb-6">
-        <a
-          href="https://billing.stripe.com/p/login/4gMeVe9aP0rTaw4eVbbMQ00"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/dashboard"
           className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors"
         >
-          Manage Subscription
-        </a>
+          Back to Dashboard
+        </Link>
       </div>
 
       {/* Manage Subscription Link */}
-      <div className="text-left">
+      <div>
         <button
           onClick={handleManageSubscription}
           disabled={isCreatingPortal}
-          className="text-gray-400 text-sm hover:text-gray-600"
+          className="text-gray-500 text-sm hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isCreatingPortal ? (
             <>

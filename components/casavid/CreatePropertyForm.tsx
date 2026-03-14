@@ -404,10 +404,10 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
             <div>
               <Label htmlFor="propertyType">Property Type</Label>
               <Select value={propertyType} onValueChange={setPropertyType} disabled={isSubmitting}>
-                <SelectTrigger>
+                <SelectTrigger translate="no" suppressHydrationWarning>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent translate="no" suppressHydrationWarning>
                   {propertyTypes.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
@@ -421,10 +421,10 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
               <div>
                 <Label htmlFor="bedrooms">Bedrooms</Label>
                 <Select value={bedrooms} onValueChange={setBedrooms} disabled={isSubmitting}>
-                  <SelectTrigger>
+                  <SelectTrigger translate="no" suppressHydrationWarning>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent translate="no" suppressHydrationWarning>
                     {bedroomOptions.map((option) => (
                       <SelectItem key={option} value={option}>
                         {option}
@@ -436,10 +436,10 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
               <div>
                 <Label htmlFor="bathrooms">Bathrooms</Label>
                 <Select value={bathrooms} onValueChange={setBathrooms} disabled={isSubmitting}>
-                  <SelectTrigger>
+                  <SelectTrigger translate="no" suppressHydrationWarning>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent translate="no" suppressHydrationWarning>
                     {bathroomOptions.map((option) => (
                       <SelectItem key={option} value={option}>
                         {option}

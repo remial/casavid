@@ -40,8 +40,8 @@ export default function CasavidTypewriter() {
   }, [currentText, isDeleting, currentPhraseIndex]);
 
   return (
-    <span className="inline-block">
-      {currentText}
+    <span className="inline-block" translate="no" suppressHydrationWarning>
+      <span suppressHydrationWarning>{currentText}</span>
       <span className="animate-pulse">|</span>
     </span>
   );

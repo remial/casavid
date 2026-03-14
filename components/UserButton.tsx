@@ -63,7 +63,7 @@ createPortalLink({
 
 function UserButton({session}: { session: Session | null}) {
   if (!session) return(
-      <Button variant={"ghost"} className="text-sm bg-green-600 rounded-full text-white" onClick={() => signIn ( undefined, { callbackUrl: '/dashboard' })}>
+      <Button variant={"ghost"} className="text-sm bg-green-600 rounded-full text-white" onClick={() => signIn ( undefined, { callbackUrl: '/dashboard' })} translate="no" suppressHydrationWarning>
        Login / Sign Up
       </Button>
   );
@@ -74,12 +74,12 @@ return session && (
             <DropdownMenuTrigger>
             <UserAvatarWrapper name={session.user?.name || ''} image={session.user?.image} />
            </DropdownMenuTrigger>
-           <DropdownMenuContent className="w-60 flex flex-col items-start bg-white">
+           <DropdownMenuContent className="w-60 flex flex-col items-start bg-white" translate="no" suppressHydrationWarning>
               {session.user?.name && (
-                <DropdownMenuLabel className="text-primary text-lg text-gray-800 overflow-hidden text-ellipsis w-full">{session.user.name}</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-primary text-lg text-gray-800 overflow-hidden text-ellipsis w-full" suppressHydrationWarning>{session.user.name}</DropdownMenuLabel>
               )}
               {session.user?.email && (
-                <DropdownMenuLabel className="text-xl text-green-600 overflow-hidden text-ellipsis w-full py-0">{session.user.email}</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-xl text-green-600 overflow-hidden text-ellipsis w-full py-0" suppressHydrationWarning>{session.user.email}</DropdownMenuLabel>
               )}
               <DropdownMenuSeparator className="w-full" />
               {session.user?.isSubscribed && (

@@ -31,7 +31,7 @@ const MobileNav: React.FC<SessionProps> = ({ session }) => {
             className="cursor-pointer"
           />
         </SheetTrigger>
-        <SheetContent className="flex flex-col gap-4 bg-white md:hidden">
+        <SheetContent className="flex flex-col gap-4 bg-white md:hidden" translate="no" suppressHydrationWarning>
           <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2">
             <span className="text-2xl font-bold text-blue-600">CasaVid</span>
             <span className="text-2xl">🏠</span>

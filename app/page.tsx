@@ -29,7 +29,7 @@ export default async function Index() {
                 <span className="text-blue-600">Seconds</span>
               </h1>
               
-              <div className="text-xl font-semibold text-green-600 h-8">
+              <div className="text-xl font-semibold text-green-600 h-8" translate="no" suppressHydrationWarning>
                 <CasavidTypewriter />
               </div>
 

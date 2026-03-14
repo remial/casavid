@@ -14,6 +14,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({ buttonText }) => {
             <Button 
                 className="hover:scale-105 transition duration-300 ease-in-out w-full lg:w-auto lg:px-8 rounded-full text-xl bg-green-600 text-white" 
                 onClick={() => signIn()}
+                translate="no"
+                suppressHydrationWarning
             >
                 {buttonText} 
             </Button>

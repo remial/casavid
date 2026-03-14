@@ -44,6 +44,8 @@ export default async function UserItem() {
         align="start"
         alignOffset={11}
         forceMount
+        translate="no"
+        suppressHydrationWarning
       >
         <div className="flex flex-col space-y-4 p-2">
           <p className="text-xs font-medium leading-none text-muted-foreground">

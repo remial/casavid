@@ -170,6 +170,8 @@ export const Item = ({
               align="start"
               side="right"
               forceMount
+              translate="no"
+              suppressHydrationWarning
             >
               <DropdownMenuItem className=" text-red-500 bg-white pt-4 cursor-pointer" onClick={onDelete}>
                 <Trash className="h-4 w-4 mr-2" />

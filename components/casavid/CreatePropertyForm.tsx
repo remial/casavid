@@ -259,22 +259,38 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
             Upload high-quality photos of each room. More photos = more detailed video.
           </p>
           
-          <div
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+          <label
+            htmlFor="photo-input"
+            className={`block border-2 border-dashed rounded-lg p-8 text-center transition-all ${
               isSubmitting 
                 ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60' 
                 : isDragging 
                   ? 'border-blue-500 bg-blue-50 cursor-pointer' 
-                  : 'border-gray-300 hover:border-blue-400 cursor-pointer'
+                  : photos.length === 0
+                    ? 'border-blue-400 bg-blue-50/50 hover:border-blue-500 hover:bg-blue-50 cursor-pointer'
+                    : 'border-gray-300 hover:border-blue-400 cursor-pointer'
             }`}
             onDrop={!isSubmitting ? handleDrop : undefined}
             onDragOver={!isSubmitting ? handleDragOver : undefined}
             onDragLeave={!isSubmitting ? handleDragLeave : undefined}
-            onClick={() => !isSubmitting && document.getElementById('photo-input')?.click()}
           >
-            <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 mb-2">Drop photos here or click to browse</p>
-            <p className="text-sm text-gray-400">JPG, PNG up to 10MB each</p>
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
+              photos.length === 0 ? 'bg-blue-100' : 'bg-gray-100'
+            }`}>
+              <Upload className={`w-8 h-8 ${photos.length === 0 ? 'text-blue-600' : 'text-gray-400'}`} />
+            </div>
+            <p className={`font-medium mb-1 ${photos.length === 0 ? 'text-blue-700' : 'text-gray-600'}`}>
+              {photos.length === 0 ? 'Tap here to add photos' : 'Tap to add more photos'}
+            </p>
+            <p className="text-gray-600 mb-3 text-sm">or drag and drop</p>
+            <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${
+              photos.length === 0 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-gray-200 text-gray-700'
+            }`}>
+              {photos.length === 0 ? 'Choose Photos' : 'Add More'}
+            </span>
+            <p className="text-sm text-gray-400 mt-3">JPG, PNG up to 10MB each</p>
             <input
               id="photo-input"
               type="file"
@@ -284,7 +300,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
               disabled={isSubmitting}
               onChange={(e) => handleFileSelect(e.target.files)}
             />
-          </div>
+          </label>
 
           {photos.length > 0 && (
             <div className={`mt-4 ${isSubmitting ? 'opacity-60' : ''}`}>

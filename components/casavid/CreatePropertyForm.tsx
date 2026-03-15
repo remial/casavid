@@ -47,9 +47,9 @@ const bedroomOptions = ['Studio', '1', '2', '3', '4', '5+'];
 const bathroomOptions = ['1', '1.5', '2', '2.5', '3', '3.5', '4+'];
 
 const videoLengthOptions = [
-  { value: 30, label: '30 seconds', desc: 'Quick overview' },
-  { value: 60, label: '60 seconds', desc: 'Standard tour' },
-  { value: 120, label: '2 minutes', desc: 'Full showcase' },
+  { value: 30, label: '30 seconds', desc: 'Quick overview', credits: 1 },
+  { value: 60, label: '60 seconds', desc: 'Standard tour', credits: 1 },
+  { value: 120, label: '2 minutes', desc: 'Full showcase', credits: 2 },
 ];
 
 const voiceStyleOptions = [
@@ -57,6 +57,38 @@ const voiceStyleOptions = [
   { value: 'professional-female', label: 'Professional Female', desc: 'Friendly, engaging tone', emoji: '👩‍💼' },
   { value: 'luxury', label: 'Luxury Style', desc: 'Elegant, premium feel', emoji: '💎' },
   { value: 'casual', label: 'Casual & Friendly', desc: 'Relaxed, conversational', emoji: '😊' },
+];
+
+const languageOptions = [
+  'English',
+  'Arabic',
+  'Bulgarian',
+  'Chinese',
+  'Czech',
+  'Danish',
+  'Dutch',
+  'Estonian',
+  'Finnish',
+  'French',
+  'German',
+  'Greek',
+  'Hindi',
+  'Hungarian',
+  'Indonesian',
+  'Italian',
+  'Japanese',
+  'Korean',
+  'Malay',
+  'Norwegian',
+  'Persian',
+  'Polish',
+  'Portuguese',
+  'Russian',
+  'Spanish',
+  'Swedish',
+  'Thai',
+  'Turkish',
+  'Ukrainian',
 ];
 
 export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyFormProps) {
@@ -73,9 +105,12 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
   // subLevel 0 = unsubscribed (all options enabled, will be redirected on submit)
   // subLevel 1 = Starter (5 photos, 30s video, first voice only)
   // subLevel 2 = Pro (10 photos, up to 60s video, all voices)
-  // subLevel 3 = Premium (10 photos for now, all video lengths, all voices)
+  // subLevel 3 = Premium (10 photos for now, all video lengths, all voices, language selection)
   const isUnsubscribed = subLevel === 0;
   const maxPhotos = isUnsubscribed ? 10 : subLevel === 1 ? 5 : 10;
+  
+  // Language selection is only available for Premium (subLevel 3) or unsubscribed users
+  const canSelectLanguage = isUnsubscribed || subLevel === 3;
   
   // Determine allowed video lengths
   const getAllowedVideoLengths = () => {
@@ -96,6 +131,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
   
   const [videoLength, setVideoLength] = useState(getDefaultVideoLength());
   const [voiceStyle, setVoiceStyle] = useState('professional-male');
+  const [narratorLanguage, setNarratorLanguage] = useState('English');
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
@@ -189,6 +225,7 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
       formData.append('highlights', highlights);
       formData.append('videoLength', videoLength.toString());
       formData.append('voiceStyle', voiceStyle);
+      formData.append('narratorLanguage', narratorLanguage);
       
       filesToUpload.forEach((file, index) => {
         formData.append(`photo_${index}`, file);
@@ -395,6 +432,13 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
                       <p className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-gray-800'}`}>{option.label}</p>
                       <p className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-500'}`}>{option.desc}</p>
                     </div>
+                    {!isDisabled && (
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
+                        option.credits > 1 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {option.credits} credit{option.credits > 1 ? 's' : ''}
+                      </span>
+                    )}
                     {isDisabled && (
                       <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
                         {subLevel === 1 ? 'Not available on Starter Plan' : 'Not available on Pro Plan'}
@@ -538,6 +582,36 @@ export default function CreatePropertyForm({ userId, subLevel }: CreatePropertyF
           </div>
         </CardContent>
       </Card>
+
+      {/* Narrator Language - Only for Premium or unsubscribed users */}
+      {canSelectLanguage && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-xl">🌍</span>
+              5. Narrator Language
+            </CardTitle>
+          </CardHeader>
+          <CardContent className={isSubmitting ? 'opacity-60 pointer-events-none' : ''}>
+            <p className="text-sm text-gray-500 mb-4">Choose the language for your video narration</p>
+            <Select value={narratorLanguage} onValueChange={setNarratorLanguage} disabled={isSubmitting}>
+              <SelectTrigger translate="no" suppressHydrationWarning className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent translate="no" suppressHydrationWarning className="max-h-[300px]">
+                {languageOptions.map((lang) => (
+                  <SelectItem key={lang} value={lang}>
+                    {lang}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-sm text-gray-500 mt-3">
+              The AI will generate the narration script and voice in the selected language.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Submit Button */}
       <div className="flex justify-center">

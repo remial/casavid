@@ -38,7 +38,7 @@ export async function POST(
     }
 
     const property = propertyDoc.data();
-    log(`Property loaded: ${property?.photos?.length || 0} photos, ${property?.videoLength}s video, voice: ${property?.voiceStyle}`);
+    log(`Property loaded: ${property?.photos?.length || 0} photos, ${property?.videoLength}s video, voice: ${property?.voiceStyle}, language: ${property?.narratorLanguage || 'English'}`);
 
     if (property?.status === 'processing') {
       log(`ERROR: Video already processing`);
@@ -89,6 +89,7 @@ export async function POST(
       settings: {
         videoLength: property?.videoLength || 60,
         voiceStyle: property?.voiceStyle || 'professional-male',
+        narratorLanguage: property?.narratorLanguage || 'English',
         propertyDetails: {
           type: property?.propertyType,
           bedrooms: property?.bedrooms,
@@ -99,7 +100,7 @@ export async function POST(
     };
 
     log(`Sending request to video processing server...`);
-    log(`Payload: ${ffmpegPayload.photos.length} photos, ${ffmpegPayload.settings.videoLength}s, ${ffmpegPayload.settings.voiceStyle}`);
+    log(`Payload: ${ffmpegPayload.photos.length} photos, ${ffmpegPayload.settings.videoLength}s, ${ffmpegPayload.settings.voiceStyle}, ${ffmpegPayload.settings.narratorLanguage}`);
     
     try {
       const fetchStart = Date.now();

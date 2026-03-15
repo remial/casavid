@@ -21,24 +21,6 @@ export async function POST(request: NextRequest) {
     const credits = userData?.credits || 0;
     const isSubscribed = userData?.isSubscribed || false;
 
-    // If user has no credits and is not subscribed, return error
-    if (credits <= 0 && !isSubscribed) {
-      return NextResponse.json({ 
-        error: 'Insufficient credits',
-        message: 'You need credits to create a video. Please purchase credits to continue.',
-        redirectTo: '/pricing'
-      }, { status: 402 });
-    }
-
-    // If user has no credits even if subscribed, they still need credits
-    if (credits <= 0) {
-      return NextResponse.json({ 
-        error: 'Insufficient credits',
-        message: 'You have run out of credits. Please purchase more credits to continue.',
-        redirectTo: '/pricing'
-      }, { status: 402 });
-    }
-
     const formData = await request.formData();
 
     const propertyType = formData.get('propertyType') as string;
@@ -47,6 +29,32 @@ export async function POST(request: NextRequest) {
     const highlights = formData.get('highlights') as string;
     const videoLength = parseInt(formData.get('videoLength') as string) || 60;
     const voiceStyle = formData.get('voiceStyle') as string;
+    const narratorLanguage = (formData.get('narratorLanguage') as string) || 'English';
+
+    // 2-minute videos cost 2 credits, all others cost 1 credit
+    const creditsRequired = videoLength >= 120 ? 2 : 1;
+
+    // If user has no credits and is not subscribed, return error
+    if (credits < creditsRequired && !isSubscribed) {
+      return NextResponse.json({ 
+        error: 'Insufficient credits',
+        message: creditsRequired > 1 
+          ? `You need ${creditsRequired} credits to create a 2-minute video. Please purchase credits to continue.`
+          : 'You need credits to create a video. Please purchase credits to continue.',
+        redirectTo: '/pricing'
+      }, { status: 402 });
+    }
+
+    // If user has insufficient credits even if subscribed, they still need credits
+    if (credits < creditsRequired) {
+      return NextResponse.json({ 
+        error: 'Insufficient credits',
+        message: creditsRequired > 1 
+          ? `You need ${creditsRequired} credits for a 2-minute video. You have ${credits} credit(s). Please purchase more credits.`
+          : 'You have run out of credits. Please purchase more credits to continue.',
+        redirectTo: '/pricing'
+      }, { status: 402 });
+    }
 
     const photos: Array<{ url: string; order: number; caption: string; duration: number }> = [];
     
@@ -104,6 +112,7 @@ export async function POST(request: NextRequest) {
       highlights,
       videoLength,
       voiceStyle,
+      narratorLanguage,
       photos,
       title: `${propertyType} - ${bedrooms} bed`,
     };
@@ -114,9 +123,9 @@ export async function POST(request: NextRequest) {
       .collection('properties')
       .add(propertyData);
 
-    // Deduct 1 credit from the user
+    // Deduct credits from the user (2 credits for 2-minute videos, 1 for others)
     await userRef.update({
-      credits: FieldValue.increment(-1)
+      credits: FieldValue.increment(-creditsRequired)
     });
 
     return NextResponse.json({ 

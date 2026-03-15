@@ -174,6 +174,7 @@ users/
               ├── highlights: string
               ├── videoLength: number (30, 60, 120)
               ├── voiceStyle: string
+              ├── narratorLanguage: string (default: 'English')
               ├── photos: Array<{url, order, caption, duration}>
               ├── videoUrl?: string
               ├── thumbnailUrl?: string
@@ -249,6 +250,7 @@ Request:
   "settings": {
     "videoLength": 60,
     "voiceStyle": "professional-male",
+    "narratorLanguage": "English",
     "propertyDetails": {
       "type": "house",
       "bedrooms": "3",

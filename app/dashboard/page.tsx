@@ -23,6 +23,7 @@ export type Property = {
   highlights: string;
   videoLength: number;
   voiceStyle: string;
+  narratorLanguage?: string;
   photos: Array<{ url: string; order: number; caption: string; duration: number }>;
   videoUrl?: string;
   thumbnailUrl?: string;

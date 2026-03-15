@@ -386,7 +386,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
           <CardTitle>Property Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 text-sm">
             <div>
               <span className="text-gray-500">Type:</span>
               <span className="ml-2 font-medium capitalize">{property.propertyType}</span>
@@ -402,6 +402,10 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
             <div>
               <span className="text-gray-500">Voice:</span>
               <span className="ml-2 font-medium capitalize">{property.voiceStyle?.replace('-', ' ')}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Language:</span>
+              <span className="ml-2 font-medium">{property.narratorLanguage || 'English'}</span>
             </div>
           </div>
           {property.highlights && (
@@ -448,7 +452,7 @@ export default function PropertyEditor({ property, userId }: PropertyEditorProps
             )}
           </Button>
           <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-            1 credit
+            {property.videoLength >= 120 ? '2 credits' : '1 credit'}
           </span>
         </div>
       </div>

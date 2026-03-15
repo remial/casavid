@@ -58,6 +58,10 @@ const Page = () => {
           text: '2-minute Tour Videos',
           negative: true 
         },
+        { 
+          text: 'Multiple Narration Languages',
+          negative: true 
+        },
       ],
     },
     {
@@ -75,6 +79,10 @@ const Page = () => {
           text: '2-minute Tour Videos',
           negative: true 
         },
+        { 
+          text: 'Multiple Narration Languages',
+          negative: true 
+        },
       ],
     },
     {
@@ -89,7 +97,7 @@ const Page = () => {
         { text: 'Quickest Processing'  },
         { text: 'Priority support' },
         { text: '2-minute Tour Videos' },
-       
+        { text: 'Multiple Narration Languages' },
       ],
     },
   ]
